@@ -1,5 +1,7 @@
 package com.dashboard.repository;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -17,14 +19,33 @@ public class CatalogueRepository {
 	private EntityManager entityManager;	
 	
 	public String add(Catalogue catalogue) {
-		//catalogue.setCatalogueId(generateId());
 		entityManager.persist(catalogue);
 		entityManager.flush();
 		return catalogue.getCatalogueId();
 	}
+
+	public List<Catalogue> getAll() {
+		String sql = "SELECT c FROM Catalogue c WHERE c.active=1";
+		return entityManager.createQuery(sql, Catalogue.class).getResultList();
+	}
+
+	public Catalogue getById(String id) {
+		return entityManager.find(Catalogue.class, id);
+	}
+
+	public String updateById(Catalogue catalogue) {
+		entityManager.merge(catalogue);
+		entityManager.flush();
+		return catalogue.getCatalogueId();
+	}
+
+	public String deleteById(String id) {
+		Catalogue catalogue = entityManager.find(Catalogue.class, id);
+		catalogue.setActive("0");
+		entityManager.merge(catalogue);
+		entityManager.flush();
+		return catalogue.getCatalogueId();
+	}
 	
-//	private String generateId() {
-//		String sql = "SELECT CONCAT('C',LPAD(IFNULL(MAX(RIGHT(CATALOGUE_ID,9)),  0)+1,10-LENGTH(IFNULL(MAX(RIGHT(CATALOGUE_ID,9)),  0)+1),'0')) AS id FROM CATALOGUE";
-//		return entityManager.createNativeQuery(sql).getSingleResult().toString();
-//	}
+
 }

@@ -27,6 +27,9 @@ public class Catalogue implements Serializable {
 	@Column(name="catalogue_name")
 	private String catagogueName;
 	
+	@Column(name="active")
+	private String active;
+	
 	public Catalogue() {
 		super();
 	}
@@ -42,6 +45,14 @@ public class Catalogue implements Serializable {
 
 	public String getCatagogueName() {
 		return catagogueName;
+	}
+
+	public String getActive() {
+		return active;
+	}
+
+	public void setActive(String active) {
+		this.active = active;
 	}
 	
 	
