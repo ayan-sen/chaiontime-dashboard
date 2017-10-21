@@ -5,8 +5,10 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.dashboard.model.Catalogue;
+import com.dashboard.model.Product;
 import com.dashboard.repository.CatalogueRepository;
 
 @Service
@@ -16,6 +18,9 @@ public class CatalogueService {
 	private CatalogueRepository catalogueRepository;
 	
 	public String add(Catalogue catalogue) {
+		List<Product> products = catalogue.getProducts();
+		if(!CollectionUtils.isEmpty(products))
+			products.forEach(p -> p.setCatalogue(catalogue));
 		return catalogueRepository.add(catalogue);
 	}
 
@@ -28,6 +33,9 @@ public class CatalogueService {
 	}
 
 	public String updateById(Catalogue catalogue) {
+		List<Product> products = catalogue.getProducts();
+		if(!CollectionUtils.isEmpty(products))
+			products.forEach(p -> p.setCatalogue(catalogue));
 		return catalogueRepository.updateById(catalogue);
 	}
 

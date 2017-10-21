@@ -22,7 +22,7 @@ public class CatalogueIdGenerator implements IdentifierGenerator {
         try {
             Statement statement=connection.createStatement();
 
-            ResultSet rs=statement.executeQuery("SELECT CONCAT('C',LPAD(IFNULL(MAX(RIGHT(CATALOGUE_ID,9)),  0)+1,10-LENGTH(IFNULL(MAX(RIGHT(CATALOGUE_ID,9)),  0)+1),'0')) AS id FROM CATALOGUE");
+            ResultSet rs=statement.executeQuery("SELECT CONCAT('C',LPAD(IFNULL(MAX(RIGHT(CATALOGUE_ID,9)),  0)+1,9,'0')) AS id FROM CATALOGUE");
 
             if(rs.next())
             {
