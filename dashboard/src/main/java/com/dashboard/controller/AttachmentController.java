@@ -39,13 +39,20 @@ public class AttachmentController {
 		ByteArrayInputStream bis = new ByteArrayInputStream(attachment.getAttachment());
 		InputStreamResource resource = new InputStreamResource(bis);
 		HttpHeaders resonseHeaders = new HttpHeaders();
-		resonseHeaders.setContentType(MediaType.IMAGE_JPEG);
+		resonseHeaders.setContentType(getMediaType(attachment.getAttachmentName()));
 		resonseHeaders.setContentDispositionFormData("attachment", attachment.getAttachmentName());
 		
 		return new ResponseEntity<InputStreamResource>(resource, resonseHeaders, HttpStatus.OK);
 	}
 
-	private String getExtention(String attachmentName) {
-		return StringUtils.substringAfterLast(attachmentName, ".");
+	private MediaType getMediaType(String attachmentName) {
+		String extention = StringUtils.substringAfterLast(attachmentName, ".");
+		switch(extention.toLowerCase()) {
+			case "jpg"  : return MediaType.IMAGE_JPEG;
+			case "jpeg" : return MediaType.IMAGE_JPEG;
+			case "png"  : return MediaType.IMAGE_PNG;
+			case "pdf"  : return MediaType.APPLICATION_PDF;
+			default     : return MediaType.IMAGE_JPEG;
+		}
 	}
 }
