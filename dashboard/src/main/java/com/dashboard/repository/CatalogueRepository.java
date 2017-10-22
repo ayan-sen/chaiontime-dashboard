@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.dashboard.model.Catalogue;
+import com.dashboard.model.Product;
 
 
 @Transactional
@@ -39,12 +40,23 @@ public class CatalogueRepository {
 		return catalogue.getCatalogueId();
 	}
 
-	public String deleteById(String id) {
-		Catalogue catalogue = entityManager.find(Catalogue.class, id);
+	public String deleteById(Catalogue catalogue) {
 		catalogue.setActive("0");
 		entityManager.merge(catalogue);
 		entityManager.flush();
 		return catalogue.getCatalogueId();
+	}
+
+	public String deleteProductById(Long id) {
+		Product product = entityManager.find(Product.class, id);
+		product.setActive("0");
+		entityManager.merge(product);
+		entityManager.flush();
+		return product.getCatalogueId();
+	}
+
+	public Product getProductById(String id) {
+		return entityManager.find(Product.class, id);
 	}
 	
 

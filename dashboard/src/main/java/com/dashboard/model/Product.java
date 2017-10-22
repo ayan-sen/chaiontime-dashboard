@@ -35,6 +35,9 @@ public class Product implements Serializable {
 	@Column(name="active")
 	private String active="1";
 	
+	@Column(name="image_id")
+	private String imageId;
+	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
 	@JoinColumn(name = "catalogue_id")
@@ -42,21 +45,6 @@ public class Product implements Serializable {
 	
 	public Product() {
 		super();
-	}
-
-	public Product(String productName, String productDesc) {
-		super();
-		this.productName = productName;
-		this.productDesc = productDesc;
-	}
-	
-	public Product(Long productId, String productName, String productDesc,
-			String active) {
-		super();
-		this.productId = productId;
-		this.productName = productName;
-		this.productDesc = productDesc;
-		this.active = active;
 	}
 
 	public Long getProductId() {
@@ -85,5 +73,29 @@ public class Product implements Serializable {
 
 	public void setCatalogue(Catalogue catalogue) {
 		this.catalogue = catalogue;
+	}
+
+	public void setActive(String active) {
+		this.active = active;
+	}
+
+	public String getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public void setProductDesc(String productDesc) {
+		this.productDesc = productDesc;
 	}
 }

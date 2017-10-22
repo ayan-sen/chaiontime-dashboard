@@ -2,6 +2,8 @@ package com.dashboard.controller;
 
 import java.util.List;
 
+import javassist.tools.rmi.ObjectNotFoundException;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.model.Catalogue;
+import com.dashboard.model.Product;
 import com.dashboard.service.CatalogueService;
 
 @RestController
@@ -32,7 +35,7 @@ public class CatalogueController {
 	}
 	
 	@GetMapping("/catalogue/{id}")
-	public Catalogue getById(@PathVariable String id) {
+	public Catalogue getById(@PathVariable String id) throws ObjectNotFoundException {
 		return catalogueService.getById(id);
 	}
 	
@@ -42,8 +45,17 @@ public class CatalogueController {
 	}
 	
 	@DeleteMapping("/catalogue/{id}")
-	public String deleteById(@PathVariable String id) {
+	public String deleteById(@PathVariable String id) throws ObjectNotFoundException {
 		return catalogueService.deleteById(id);
 	}
 	
+	@GetMapping("/product/{id}")
+	public Product getProductById(@PathVariable String id) throws ObjectNotFoundException {
+		return catalogueService.getProductById(id);
+	}
+	
+	@DeleteMapping("/product/{id}")
+	public String deleteProductById(@PathVariable Long id) {
+		return catalogueService.deleteProductById(id);
+	}
 }
