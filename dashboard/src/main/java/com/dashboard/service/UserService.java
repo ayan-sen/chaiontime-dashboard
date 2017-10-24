@@ -7,6 +7,7 @@ import javassist.tools.rmi.ObjectNotFoundException;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.model.User;
@@ -19,10 +20,12 @@ public class UserService {
 	@Resource
 	private UserRepository userRepository;
 	
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public String add(User user) {
 		return userRepository.add(user);
 	}
 
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public List<User> getAll() {
 		List<User> users = userRepository.getAll();
 		return users;
@@ -36,6 +39,7 @@ public class UserService {
 		return user;
 	}
 
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public String updateById(User user) throws ObjectNotFoundException {
 		if(StringUtils.isEmpty(user.getPassword())) {
 			User oldUser = this.getById(user.getUseId());
@@ -44,6 +48,7 @@ public class UserService {
 		return userRepository.updateById(user);
 	}
 
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public String deleteById(String id) throws ObjectNotFoundException {
 		User user = this.getById(id);
 		return userRepository.deleteById(user);
