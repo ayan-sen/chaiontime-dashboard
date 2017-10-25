@@ -1,6 +1,7 @@
 package com.dashboard.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Entity
 @Table(name="PRODUCT")
@@ -37,6 +39,26 @@ public class Product implements Serializable {
 	
 	@Column(name="image_id")
 	private String imageId;
+	
+	@Column(name="PRODUCT_SIZE")
+	private String productSIze;
+	
+	@Column(name="PRODUCT_BUYPRICE")
+	private Double productBuyPrice;
+	
+	@Column(name="PRODUCT_DISCA")
+	private String productDisca;
+	
+	@JsonSerialize(using=JsonDateSerializer.class)
+	@Column(name="PRODUCT_DISCSTARTDTE")
+	private Date startDate;
+	
+	@JsonSerialize(using=JsonDateSerializer.class)
+	@Column(name="PRODUCT_DISCENDDTE")
+	private Date endDate;
+	
+	@Column(name="PRODUCT_FINALBUYPRICE")
+	private Double finalBuyPrice;
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
@@ -97,5 +119,53 @@ public class Product implements Serializable {
 
 	public void setProductDesc(String productDesc) {
 		this.productDesc = productDesc;
+	}
+
+	public String getProductSIze() {
+		return productSIze;
+	}
+
+	public void setProductSIze(String productSIze) {
+		this.productSIze = productSIze;
+	}
+
+	public Double getProductBuyPrice() {
+		return productBuyPrice;
+	}
+
+	public void setProductBuyPrice(Double productBuyPrice) {
+		this.productBuyPrice = productBuyPrice;
+	}
+
+	public String getProductDisca() {
+		return productDisca;
+	}
+
+	public void setProductDisca(String productDisca) {
+		this.productDisca = productDisca;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public Double getFinalBuyPrice() {
+		return finalBuyPrice;
+	}
+
+	public void setFinalBuyPrice(Double finalBuyPrice) {
+		this.finalBuyPrice = finalBuyPrice;
 	}
 }
