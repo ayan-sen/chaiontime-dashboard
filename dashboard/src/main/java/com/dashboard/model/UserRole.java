@@ -13,10 +13,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SelectBeforeUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="USER_ROLES")
+@DynamicUpdate(value=true)
+@SelectBeforeUpdate(value=true)
 public class UserRole implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -50,8 +55,8 @@ public class UserRole implements Serializable {
 		return userRoleId;
 	}
 
-	public String getUseId() {
-		return user.getUseId();
+	public String getUserId() {
+		return user.getUserId();
 	}
 
 	public String getRole() {

@@ -33,7 +33,7 @@ public class UserController {
 		return userService.getAll();
 	}
 	
-	@GetMapping("/user/{id}")
+	@GetMapping("/user/{id:.+}")
 	public User getById(@PathVariable String id) throws ObjectNotFoundException {
 		return userService.getById(id);
 	}
@@ -43,7 +43,7 @@ public class UserController {
 		return userService.updateById(user);
 	}
 	
-	@DeleteMapping("/user/{id}")
+	@DeleteMapping("/user/{id:.+}")
 	public String deleteById(@PathVariable String id) throws ObjectNotFoundException {
 		return userService.deleteById(id);
 	}

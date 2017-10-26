@@ -4,12 +4,14 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.dashboard.model.User;
 
-
+@Transactional
 @Repository
 public class UserRepository {
 
@@ -17,9 +19,11 @@ public class UserRepository {
 	private EntityManager entityManager;	
 	
 	public String add(User user) {
+		String notEncryptedPassword = user.getPassword();
+		user.setPassword(new BCryptPasswordEncoder().encode(notEncryptedPassword));
 		entityManager.persist(user);
 		entityManager.flush();
-		return user.getUseId();
+		return user.getUserId();
 	}
 
 	public List<User> getAll() {
@@ -34,13 +38,13 @@ public class UserRepository {
 	public String updateById(User user) {
 		entityManager.merge(user);
 		entityManager.flush();
-		return user.getUseId();
+		return user.getUserId();
 	}
 
 	public String deleteById(User user) {
 		user.setActive(false);
 		entityManager.merge(user);
 		entityManager.flush();
-		return user.getUseId();
+		return user.getUserId();
 	}
 }

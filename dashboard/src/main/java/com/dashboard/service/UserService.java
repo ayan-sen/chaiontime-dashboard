@@ -9,8 +9,11 @@ import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import com.dashboard.model.Product;
 import com.dashboard.model.User;
+import com.dashboard.model.UserRole;
 import com.dashboard.repository.UserRepository;
 
 
@@ -22,6 +25,9 @@ public class UserService {
 	
 	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public String add(User user) {
+		List<UserRole> userRoles = user.getUserRoles();
+		if(!CollectionUtils.isEmpty(userRoles))
+			userRoles.forEach(u -> u.setUser(user));
 		return userRepository.add(user);
 	}
 
@@ -42,9 +48,12 @@ public class UserService {
 	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public String updateById(User user) throws ObjectNotFoundException {
 		if(StringUtils.isEmpty(user.getPassword())) {
-			User oldUser = this.getById(user.getUseId());
+			User oldUser = this.getById(user.getUserId());
 			user.setPassword(oldUser.getPassword());
 		}
+		List<UserRole> userRoles = user.getUserRoles();
+		if(!CollectionUtils.isEmpty(userRoles))
+			userRoles.forEach(u -> u.setUser(user));
 		return userRepository.updateById(user);
 	}
 

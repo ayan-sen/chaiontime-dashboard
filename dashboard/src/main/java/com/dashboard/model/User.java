@@ -7,24 +7,24 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SelectBeforeUpdate;
 
 @Entity
 @Table(name="USER")
+@DynamicUpdate(value=true)
+@SelectBeforeUpdate(value=true)
 public class User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GenericGenerator(name = "user_id_gen", strategy = "com.dashboard.repository.UserIdGenerator")
-	@GeneratedValue(generator = "user_id_gen")
 	@Column(name = "USER_ID")
-	private String useId;
+	private String userId;
 	
 	@Column(name = "USER_PASSWORD")
 	private String password;
@@ -59,24 +59,24 @@ public class User implements Serializable{
 	@Column(name = "USER_WALLETAMT")
 	private Double walletAmount;
 	
-	@Column(name = "USER_ACCESSRIGHT")
-	private String accessRights;
-	
 	@Column(name = "USER_ACTIVE")
 	private Boolean active=true;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
 
+	
+	
 	public User() {
 		super();
 	}
 
-	public User(String password, String userName, String email,
+	public User(String userId, String password, String userName, String email,
 			Long phone, String addressLine1, String addressLine2, String city,
 			String state, String pincode, String country, Double walletAmount,
 			String accessRights, Boolean active) {
 		super();
+		this.userId = userId;
 		this.password = password;
 		this.userName = userName;
 		this.email = email;
@@ -88,14 +88,13 @@ public class User implements Serializable{
 		this.pincode = pincode;
 		this.country = country;
 		this.walletAmount = walletAmount;
-		this.accessRights = accessRights;
 		this.active = active;
 	}
 
-	public String getUseId() {
-		return useId;
+	public String getUserId() {
+		return userId;
 	}
-
+	
 	public String getPassword() {
 		return password;
 	}
@@ -138,10 +137,6 @@ public class User implements Serializable{
 
 	public Double getWalletAmount() {
 		return walletAmount;
-	}
-
-	public String getAccessRights() {
-		return accessRights;
 	}
 
 	public Boolean isActive() {
