@@ -1,10 +1,7 @@
 package com.dashboard.security;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javassist.tools.rmi.ObjectNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,31 +12,39 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.model.User;
-import com.dashboard.service.UserService;
+import com.dashboard.repository.UserRepository;
 
 @Service
 public class DashboardUserDetailService implements UserDetailsService {
 	
 	@Autowired
-	private UserService userService;
+	private UserRepository userRepository;
+	
+	private String userId;
 	
 	@Override
 	public UserDetails loadUserByUsername(String userId)
 			throws UsernameNotFoundException {
 		
-		try {
-			User activeUserInfo = userService.getById(userId);
-		
-			//GrantedAuthority authority = new SimpleGrantedAuthority(activeUserInfo.getAccessRights());
+			User activeUserInfo = userRepository.getById(userId);
+			
+			if(activeUserInfo == null) {
+				throw new UsernameNotFoundException(userId + " is not found");
+			}
+			setUserId(userId);
 			List<GrantedAuthority> auths = activeUserInfo.getUserRoles().stream().map(u -> new SimpleGrantedAuthority(u.getRole())).collect(Collectors.toList());	
-			UserDetails userDetails = (UserDetails)new org.springframework.security.core.userdetails.User(activeUserInfo.getUserName(),
+			UserDetails userDetails = (UserDetails)new org.springframework.security.core.userdetails.User(activeUserInfo.getUserId(),
 					activeUserInfo.getPassword(), auths);
 			return userDetails;
-		} catch (ObjectNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 }

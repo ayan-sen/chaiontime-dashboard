@@ -1,18 +1,25 @@
 package com.dashboard.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import javassist.tools.rmi.ObjectNotFoundException;
 
-@Controller
+import javax.annotation.Resource;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.dashboard.model.User;
+import com.dashboard.service.UserService;
+
+@RestController
 public class DashboardController {
 
-		
-	@RequestMapping("/")
-	String home(ModelMap modal) {
-		modal.addAttribute("title","CRUD Example");
-		return "index";
+	@Resource
+	private UserService userService;
+	
+	@GetMapping("/userinfo")
+	private User getuserinfo() throws ObjectNotFoundException {
+		return userService.getById(SecurityContextHolder.getContext().getAuthentication().getName());
 	}
 
 		

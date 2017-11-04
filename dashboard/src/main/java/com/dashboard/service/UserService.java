@@ -11,7 +11,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.dashboard.model.Product;
 import com.dashboard.model.User;
 import com.dashboard.model.UserRole;
 import com.dashboard.repository.UserRepository;
@@ -36,7 +35,8 @@ public class UserService {
 		List<User> users = userRepository.getAll();
 		return users;
 	}
-
+	
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public User getById(String id) throws ObjectNotFoundException {
 		User user = userRepository.getById(id);
 		if(user == null) {

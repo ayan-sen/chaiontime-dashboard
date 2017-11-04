@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -31,7 +32,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    .authorizeRequests()
 		    .antMatchers("/dashboard/**").hasAnyRole("ADMIN","USER")
 		    .and().httpBasic().realmName("CHAIONTIME")
-		    .authenticationEntryPoint(appAuthenticationEntryPoint);
+		    .authenticationEntryPoint(appAuthenticationEntryPoint)
+		    .and()
+            .formLogin().loginProcessingUrl("/").defaultSuccessUrl("/userinfo")
+            .permitAll()
+            .and()
+            .logout().logoutUrl("/logout").logoutSuccessUrl("/")
+            .permitAll();
 	} 
     
 	@Autowired

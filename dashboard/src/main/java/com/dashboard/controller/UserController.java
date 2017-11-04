@@ -1,6 +1,7 @@
 package com.dashboard.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.model.User;
@@ -47,4 +50,5 @@ public class UserController {
 	public String deleteById(@PathVariable String id) throws ObjectNotFoundException {
 		return userService.deleteById(id);
 	}
+	
 }
