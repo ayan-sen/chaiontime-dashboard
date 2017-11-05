@@ -36,6 +36,8 @@ public class UserRepository {
 	}
 
 	public String updateById(User user) {
+		String notEncryptedPassword = user.getPassword();
+		user.setPassword(new BCryptPasswordEncoder().encode(notEncryptedPassword));
 		entityManager.merge(user);
 		entityManager.flush();
 		return user.getUserId();

@@ -22,7 +22,7 @@ public class UserService {
 	@Resource
 	private UserRepository userRepository;
 	
-	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
+	//@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public String add(User user) {
 		List<UserRole> userRoles = user.getUserRoles();
 		if(!CollectionUtils.isEmpty(userRoles))

@@ -28,13 +28,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable()
+		http.cors()
+			.configurationSource(corsConfigurationSource())
+			.and()
+			.csrf()
+			.disable()
 		    .authorizeRequests()
 		    .antMatchers("/dashboard/**").hasAnyRole("ADMIN","USER")
 		    .and().httpBasic().realmName("CHAIONTIME")
 		    .authenticationEntryPoint(appAuthenticationEntryPoint)
 		    .and()
-            .formLogin().loginProcessingUrl("/").defaultSuccessUrl("/userinfo")
+            .formLogin().loginPage("/")
+            .loginProcessingUrl("/login")
+            .defaultSuccessUrl("/userinfo")
+            .failureUrl("/loginfail")
             .permitAll()
             .and()
             .logout().logoutUrl("/logout").logoutSuccessUrl("/")
