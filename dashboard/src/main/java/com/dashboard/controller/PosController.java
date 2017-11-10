@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.model.PointOfSale;
+import com.dashboard.model.Vendor;
 import com.dashboard.service.PosService;
 
 @RestController
@@ -46,5 +47,15 @@ public class PosController {
 	@DeleteMapping("/pos/{id}")
 	public Long deleteById(@PathVariable Long id) throws ObjectNotFoundException {
 		return posService.deleteById(id);
+	}
+	
+	@GetMapping("/pos/{id}")
+	public Vendor getVendorById(@PathVariable String id) throws ObjectNotFoundException {
+		return posService.getVendorById(id);
+	}
+	
+	@DeleteMapping("/vendor/{id}")
+	public Long deleteVendorById(@PathVariable Long id) {
+		return posService.deleteVendorById(id);
 	}
 }

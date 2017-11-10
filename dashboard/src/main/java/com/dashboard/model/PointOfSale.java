@@ -1,12 +1,16 @@
 package com.dashboard.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -31,6 +35,9 @@ public class PointOfSale implements Serializable {
 	
 	@Column(name="POS_OWNER_MAIL")
 	private String posOwnerEmail;
+	
+	@OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Vendor> vendors;
 
 	public Long getPosId() {
 		return posId;
@@ -70,6 +77,14 @@ public class PointOfSale implements Serializable {
 
 	public void setPosOwnerEmail(String posOwnerEmail) {
 		this.posOwnerEmail = posOwnerEmail;
+	}
+
+	public List<Vendor> getVendors() {
+		return vendors;
+	}
+
+	public void setVendors(List<Vendor> vendors) {
+		this.vendors = vendors;
 	}
 	
 	

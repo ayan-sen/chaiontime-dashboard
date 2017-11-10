@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.dashboard.model.PointOfSale;
+import com.dashboard.model.Vendor;
 
 @Transactional
 @Repository
@@ -43,5 +44,17 @@ public class PosRepository {
 		entityManager.merge(pointOfSale);
 		entityManager.flush();
 		return pointOfSale.getPosId();
+	}
+	
+	public Long deleteVendorById(Long id) {
+		Vendor vendor = entityManager.find(Vendor.class, id);
+		vendor.setActive(0);
+		entityManager.merge(vendor);
+		entityManager.flush();
+		return vendor.getPosId();
+	}
+
+	public Vendor getVendorById(String id) {
+		return entityManager.find(Vendor.class, id);
 	}
 }

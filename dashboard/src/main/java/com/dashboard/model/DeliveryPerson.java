@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="DELIVERY")
+@Table(name="DELIVERY_BOY")
 public class DeliveryPerson implements Serializable {  	
 
 	private static final long serialVersionUID = 1L;
@@ -32,6 +32,9 @@ public class DeliveryPerson implements Serializable {
 	@Column(name="NATIONAL_ID")
 	private String nationalId;
 
+	@Column(name="image_id")
+	private String imageId;
+	
 	public Long getDeliveryPersonId() {
 		return deliveryPersonId;
 	}
@@ -70,6 +73,14 @@ public class DeliveryPerson implements Serializable {
 
 	public void setNationalId(String nationalId) {
 		this.nationalId = nationalId;
+	}
+
+	public String getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 
 }

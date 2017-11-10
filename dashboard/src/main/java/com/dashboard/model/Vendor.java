@@ -2,12 +2,18 @@ package com.dashboard.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="VENDOR")
@@ -32,11 +38,13 @@ public class Vendor implements Serializable {
 	@Column(name="VENDOR_ACTIVE")
 	private int active=1;
 	
-	@Column(name="POS_ID")
-	private Long posId;
-	
 	@Column(name="VENDOR_ADDRESS")
 	private String vendorAddress;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
+	@JoinColumn(name = "POS_ID")
+	private PointOfSale pointOfSale;
 
 	public Long getVendorId() {
 		return vendorId;
@@ -78,20 +86,26 @@ public class Vendor implements Serializable {
 		this.active = active;
 	}
 
-	public Long getPosId() {
-		return posId;
-	}
-
-	public void setPosId(Long posId) {
-		this.posId = posId;
-	}
-
 	public String getVendorAddress() {
 		return vendorAddress;
 	}
 
 	public void setVendorAddress(String vendorAddress) {
 		this.vendorAddress = vendorAddress;
+	}
+
+	public PointOfSale getPointOfSale() {
+		return pointOfSale;
+	}
+
+	public void setPointOfSale(PointOfSale pointOfSale) {
+		this.pointOfSale = pointOfSale;
+	}
+	
+	public Long getPosId() {
+		if(this.pointOfSale != null)
+			return pointOfSale.getPosId();
+		return null;
 	}
 	
 	
