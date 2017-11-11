@@ -7,6 +7,7 @@ import javax.security.auth.login.LoginException;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.service.UserService;
@@ -18,7 +19,7 @@ public class DashboardController {
 	@Resource
 	private UserService userService;
 	
-	@GetMapping("/userinfo")
+	@PostMapping("/login")
 	public UserView getuserinfo() throws ObjectNotFoundException {
 		return new UserView(userService.getById(SecurityContextHolder.getContext().getAuthentication().getName()));
 	}

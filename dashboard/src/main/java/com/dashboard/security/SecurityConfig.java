@@ -38,12 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    .and().httpBasic().realmName("CHAIONTIME")
 		    .authenticationEntryPoint(appAuthenticationEntryPoint)
 		    .and()
-            .formLogin().loginPage("/")
-            .loginProcessingUrl("/login")
-            .defaultSuccessUrl("/userinfo")
-            .failureUrl("/loginfail")
-            .permitAll()
-            .and()
             .logout().logoutUrl("/logout").logoutSuccessUrl("/")
             .permitAll();
 	} 
