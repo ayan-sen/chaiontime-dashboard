@@ -36,7 +36,7 @@ public class PointOfSale implements Serializable {
 	@Column(name="POS_OWNER_MAIL")
 	private String posOwnerEmail;
 	
-	@OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "pointOfSale", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Vendor> vendors;
 
 	public Long getPosId() {
