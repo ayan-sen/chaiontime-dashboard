@@ -11,7 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="POS")
@@ -36,8 +43,13 @@ public class PointOfSale implements Serializable {
 	@Column(name="POS_OWNER_MAIL")
 	private String posOwnerEmail;
 	
-	@OneToMany(mappedBy = "pointOfSale", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "posVendor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
     private List<Vendor> vendors;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@Transient
+    private Order orderPos;
 
 	public Long getPosId() {
 		return posId;
@@ -85,6 +97,14 @@ public class PointOfSale implements Serializable {
 
 	public void setVendors(List<Vendor> vendors) {
 		this.vendors = vendors;
+	}
+
+	public Order getOrderPos() {
+		return orderPos;
+	}
+
+	public void setOrderPos(Order orderPos) {
+		this.orderPos = orderPos;
 	}
 	
 	

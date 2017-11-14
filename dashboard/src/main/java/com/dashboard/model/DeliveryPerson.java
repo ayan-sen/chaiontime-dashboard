@@ -2,12 +2,17 @@ package com.dashboard.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="DELIVERY_BOY")
@@ -34,6 +39,11 @@ public class DeliveryPerson implements Serializable {
 
 	@Column(name="image_id")
 	private String imageId;
+	
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL)
+	@Transient
+    private Order orderDp;
 	
 	public Long getDeliveryPersonId() {
 		return deliveryPersonId;
@@ -81,6 +91,14 @@ public class DeliveryPerson implements Serializable {
 
 	public void setImageId(String imageId) {
 		this.imageId = imageId;
+	}
+
+	public Order getOrderDp() {
+		return orderDp;
+	}
+
+	public void setOrderDp(Order order) {
+		this.orderDp = orderDp;
 	}
 
 }

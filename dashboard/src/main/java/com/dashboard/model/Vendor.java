@@ -11,7 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,10 +45,17 @@ public class Vendor implements Serializable {
 	@Column(name="VENDOR_ADDRESS")
 	private String vendorAddress;
 	
+	@Column(name="POS_ID")
+	private Long posId;
+	
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
-	@JoinColumn(name = "POS_ID")
-	private PointOfSale pointOfSale;
+	@ManyToOne
+	@JoinColumn(name = "POS_ID",referencedColumnName="POS_ID", insertable = false, updatable = false)
+	private PointOfSale posVendor;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@Transient
+    private Order vendorOrder;
 
 	public Long getVendorId() {
 		return vendorId;
@@ -94,18 +105,28 @@ public class Vendor implements Serializable {
 		this.vendorAddress = vendorAddress;
 	}
 
-	public PointOfSale getPointOfSale() {
-		return pointOfSale;
+	public Long getPosId() {
+		return posId;
 	}
 
-	public void setPointOfSale(PointOfSale pointOfSale) {
-		this.pointOfSale = pointOfSale;
+	public void setPosId(Long posId) {
+		this.posId = posId;
 	}
-	
-	public Long getPosId() {
-		if(this.pointOfSale != null)
-			return pointOfSale.getPosId();
-		return null;
+
+	public Order getVendorOrder() {
+		return vendorOrder;
+	}
+
+	public void setVendorOrder(Order vendorOrder) {
+		this.vendorOrder = vendorOrder;
+	}
+
+	public PointOfSale getPosVendor() {
+		return posVendor;
+	}
+
+	public void setPosVendor(PointOfSale posVendor) {
+		this.posVendor = posVendor;
 	}
 	
 	

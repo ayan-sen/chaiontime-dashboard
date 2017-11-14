@@ -24,7 +24,7 @@ public class PosService {
 	public Long add(PointOfSale pointOfSale) {
 		List<Vendor> vendors = pointOfSale.getVendors();
 		if(!CollectionUtils.isEmpty(vendors))
-			vendors.forEach(v -> v.setPointOfSale(pointOfSale));
+			vendors.forEach(v -> v.setPosVendor(pointOfSale));
 		return posRepository.add(pointOfSale);
 	}
 
@@ -52,7 +52,7 @@ public class PosService {
 	public Long updateById(PointOfSale pointOfSale) throws ObjectNotFoundException {
 		List<Vendor> vendors = pointOfSale.getVendors();
 		if(!CollectionUtils.isEmpty(vendors))
-			vendors.forEach(v -> v.setPointOfSale(pointOfSale));
+			vendors.forEach(v -> v.setPosVendor(pointOfSale));
 		return posRepository.updateById(pointOfSale);
 	}
 
