@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.dashboard.model.Catalogue;
 import com.dashboard.model.Product;
+import com.dashboard.model.Stock;
 import com.dashboard.repository.CatalogueRepository;
 
 @Service
@@ -77,5 +78,25 @@ public class CatalogueService {
 	@Secured ({"ROLE_ADMIN"})
 	public String deleteProductById(Long id) {
 		return catalogueRepository.deleteProductById(id);
+	}
+	
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	public Long addStock(Stock stock) {
+		return catalogueRepository.addStock(stock);
+	}
+	
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	public Long updateStock(Stock stock) {
+		return catalogueRepository.updateStock(stock);
+	}
+	
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	public Stock findStockById(Long id) {
+		return catalogueRepository.findStockById(id);
+	}
+	
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	public Long deleteStock(Long id) {
+		return catalogueRepository.deleteStock(id);
 	}
 }

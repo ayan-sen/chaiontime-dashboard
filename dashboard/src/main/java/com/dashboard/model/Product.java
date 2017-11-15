@@ -2,6 +2,7 @@ package com.dashboard.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +13,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -41,7 +47,7 @@ public class Product implements Serializable {
 	private String imageId;
 	
 	@Column(name="PRODUCT_SIZE")
-	private String productSIze;
+	private String productSize;
 	
 	@Column(name="PRODUCT_BUYPRICE")
 	private Double productBuyPrice;
@@ -64,6 +70,9 @@ public class Product implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
 	@JoinColumn(name = "catalogue_id")
 	private Catalogue catalogue;
+	
+	@OneToMany(mappedBy = "productStock", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Stock> stocks;
 	
 	public Product() {
 		super();
@@ -121,12 +130,12 @@ public class Product implements Serializable {
 		this.productDesc = productDesc;
 	}
 
-	public String getProductSIze() {
-		return productSIze;
+	public String getProductSize() {
+		return productSize;
 	}
 
-	public void setProductSIze(String productSIze) {
-		this.productSIze = productSIze;
+	public void setProductSize(String productSize) {
+		this.productSize = productSize;
 	}
 
 	public Double getProductBuyPrice() {
@@ -168,4 +177,13 @@ public class Product implements Serializable {
 	public void setFinalBuyPrice(Double finalBuyPrice) {
 		this.finalBuyPrice = finalBuyPrice;
 	}
+
+	public List<Stock> getStocks() {
+		return stocks;
+	}
+
+	public void setStocks(List<Stock> stocks) {
+		this.stocks = stocks;
+	}
+	
 }

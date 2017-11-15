@@ -17,7 +17,7 @@ public class ReportService {
 	@Resource
 	private ReportRepository reportRepository;
 	
-	public List<Map<String, Object>> getSalesReport(Date fromDate, Date toDate) throws ParseException {
+	public List<Object[]> getSalesReport(Date fromDate, Date toDate) throws ParseException {
 		return reportRepository.getSalesReport(fromDate, toDate);
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.dashboard.model.Catalogue;
 import com.dashboard.model.Product;
+import com.dashboard.model.Stock;
 
 
 @Transactional
@@ -59,5 +60,27 @@ public class CatalogueRepository {
 		return entityManager.find(Product.class, id);
 	}
 	
+	public Long addStock(Stock stock) {
+		entityManager.persist(stock);
+		entityManager.flush();
+		return stock.getProductId();
+	}
+	
+	public Long updateStock(Stock stock) {
+		entityManager.merge(stock);
+		entityManager.flush();
+		return stock.getProductId();
+	}
+	
+	public Stock findStockById(Long id) {
+		return entityManager.find(Stock.class, id);
+	}
+	
+	public Long deleteStock(Long id) {
+		Stock stock = entityManager.find(Stock.class, id);
+		entityManager.remove(stock);
+		entityManager.flush();
+		return stock.getProductId();
+	}
 
 }

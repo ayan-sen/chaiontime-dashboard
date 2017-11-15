@@ -19,12 +19,12 @@ public class ReportRepository {
 	@PersistenceContext	
 	private EntityManager entityManager;	
 	
-	public List<Map<String, Object>> getSalesReport(Date fromDate, Date toDate) throws ParseException {
-		String query = "SELECT p.pos_id,COUNT(o.order_id) "
+	public List<Object[]> getSalesReport(Date fromDate, Date toDate) throws ParseException {
+		String query = "SELECT p.posId,COUNT(o.orderId) "
 						+ "FROM PointOfSale p,  Order o "
 						+ "WHERE o.posId = p.posId "
-						+ "AND o.orderDate BETWEEN :start AND :END"
-						+ "AND o.GROUP BY p.posId";
+						+ "AND o.orderDate BETWEEN :start AND :end "
+						+ "GROUP BY p.posId";
 		return entityManager.createQuery(query)
 							.setParameter("start", fromDate)
 							.setParameter("end", toDate)

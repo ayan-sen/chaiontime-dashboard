@@ -3,7 +3,6 @@ package com.dashboard.controller;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -21,7 +20,7 @@ public class ReportController {
 	private ReportService reportService;
 	
 	@GetMapping("/reports/salesreport")
-	public List<Map<String, Object>> getSalesReport(@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,
+	public List<Object[]> getSalesReport(@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,
 													@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate ) 
 													throws ParseException {
 		return reportService.getSalesReport(fromDate, toDate);
