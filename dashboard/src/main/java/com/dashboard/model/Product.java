@@ -66,13 +66,13 @@ public class Product implements Serializable {
 	@Column(name="PRODUCT_FINALBUYPRICE")
 	private Double finalBuyPrice;
 	
+	@Column(name="UNIT")
+	private Long unit;
+	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
 	@JoinColumn(name = "catalogue_id")
 	private Catalogue catalogue;
-	
-	@OneToMany(mappedBy = "productStock", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Stock> stocks;
 	
 	public Product() {
 		super();
@@ -178,12 +178,11 @@ public class Product implements Serializable {
 		this.finalBuyPrice = finalBuyPrice;
 	}
 
-	public List<Stock> getStocks() {
-		return stocks;
+	public Long getUnit() {
+		return unit;
 	}
 
-	public void setStocks(List<Stock> stocks) {
-		this.stocks = stocks;
+	public void setUnit(Long unit) {
+		this.unit = unit;
 	}
-	
 }

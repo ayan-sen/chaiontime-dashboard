@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.model.Catalogue;
 import com.dashboard.model.Product;
-import com.dashboard.model.Stock;
 import com.dashboard.service.CatalogueService;
 
 @RestController
@@ -58,25 +57,5 @@ public class CatalogueController {
 	@DeleteMapping("/product/{id}")
 	public String deleteProductById(@PathVariable Long id) {
 		return catalogueService.deleteProductById(id);
-	}
-	
-	@PutMapping("/stock")
-	public Long add(@RequestBody Stock stock) {
-		return catalogueService.addStock(stock);
-	}
-	
-	@GetMapping("/stock/{id}")
-	public Stock getById(@PathVariable Long id) throws ObjectNotFoundException {
-		return catalogueService.findStockById(id);
-	}
-	
-	@PatchMapping("/stock")
-	public Long updateStockById(@RequestBody Stock stock) {
-		return catalogueService.updateStock(stock);
-	}
-	
-	@DeleteMapping("/stock/{id}")
-	public Long deleteById(@PathVariable Long id) throws ObjectNotFoundException {
-		return catalogueService.deleteStock(id);
 	}
 }
