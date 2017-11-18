@@ -1,5 +1,6 @@
 package com.dashboard.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javassist.tools.rmi.ObjectNotFoundException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.dashboard.model.Catalogue;
+import com.dashboard.model.EmailConfig;
 import com.dashboard.model.Product;
 import com.dashboard.repository.CatalogueRepository;
 
@@ -20,11 +22,18 @@ public class CatalogueService {
 	@Resource
 	private CatalogueRepository catalogueRepository;
 	
+	@Resource
+	private EmailService emailService;
+	
 	@Secured ({"ROLE_ADMIN"})
 	public String add(Catalogue catalogue) {
 		List<Product> products = catalogue.getProducts();
 		if(!CollectionUtils.isEmpty(products))
 			products.forEach(p -> p.setCatalogue(catalogue));
+		
+		EmailConfig config = new EmailConfig(Arrays.asList("ayan.sen@live.com"), null, null, "catalog added", "tempalate/emailbody.st");
+		emailService.sendEmail(config);
+		
 		return catalogueRepository.add(catalogue);
 	}
 
@@ -45,6 +54,9 @@ public class CatalogueService {
 			throw new ObjectNotFoundException("Catalogue is not found for id :" + id);
 		}
 		catalogue.getProducts().removeIf(p -> p.getActive().equals("0"));
+		
+		EmailConfig config = new EmailConfig(Arrays.asList("ayan.sen@live.com"), null, null, "catalog added", "catalog test mail");
+		emailService.sendEmail(config);
 		return catalogue;
 	}
 

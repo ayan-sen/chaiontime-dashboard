@@ -3,6 +3,7 @@ package com.dashboard.controller;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -19,10 +20,24 @@ public class ReportController {
 	@Resource
 	private ReportService reportService;
 	
-	@GetMapping("/reports/salesreport")
-	public List<Object[]> getSalesReport(@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,
-													@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate ) 
+	@GetMapping("/reports/salesreports/pos")
+	public List<Map<String, Object>> getSalesReportByPos(@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy'T'HH:mm:ss") Date fromDate,
+													@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy'T'HH:mm:ss") Date toDate ) 
 													throws ParseException {
-		return reportService.getSalesReport(fromDate, toDate);
+		return reportService.getSalesReportByPos(fromDate, toDate);
+	}
+	
+	@GetMapping("/reports/salesreports/product")
+	public List<Map<String, Object>> getSalesReportByProduct(@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy'T'HH:mm:ss") Date fromDate,
+													@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy'T'HH:mm:ss") Date toDate ) 
+													throws ParseException {
+		return reportService.getSalesReportByProduct(fromDate, toDate);
+	}
+	
+	@GetMapping("/reports/salesreports/summary")
+	public List<Map<String, Object>> getSalesSummaryReport(@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy'T'HH:mm:ss") Date fromDate,
+													@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy'T'HH:mm:ss") Date toDate ) 
+													throws ParseException {
+		return reportService.getSalesSummaryReport(fromDate, toDate);
 	}
 }
