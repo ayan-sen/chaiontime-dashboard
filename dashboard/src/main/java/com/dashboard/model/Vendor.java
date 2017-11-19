@@ -34,10 +34,10 @@ public class Vendor implements Serializable {
 	private String vendorName;
 	
 	@Column(name="VENDOR_LONG")
-	private Double longitude;
+	private String longitude;
 	
 	@Column(name="VENDOR_LAT")
-	private Double latitude;
+	private String latitude;
 	
 	@Column(name="VENDOR_ACTIVE")
 	private int active=1;
@@ -73,19 +73,19 @@ public class Vendor implements Serializable {
 		this.vendorName = vendorName;
 	}
 
-	public Double getLongitude() {
+	public String getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(Double longitude) {
+	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
 
-	public Double getLatitude() {
+	public String getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Double latitude) {
+	public void setLatitude(String latitude) {
 		this.latitude = latitude;
 	}
 

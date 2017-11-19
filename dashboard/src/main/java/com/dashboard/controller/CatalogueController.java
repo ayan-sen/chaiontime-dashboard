@@ -1,6 +1,8 @@
 package com.dashboard.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 
@@ -14,9 +16,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dashboard.model.Action;
 import com.dashboard.model.Catalogue;
+import com.dashboard.model.Message;
 import com.dashboard.model.Product;
 import com.dashboard.service.CatalogueService;
+import com.dashboard.service.PushNotificationService;
 
 @RestController
 public class CatalogueController {
@@ -24,9 +29,14 @@ public class CatalogueController {
 	@Resource
 	private CatalogueService catalogueService;
 	
+	@Resource
+	private PushNotificationService pushNotificationService;
+	
 	@PutMapping("/catalogue")
-	public String add(@RequestBody Catalogue catalogue) {
-		return catalogueService.add(catalogue);
+	public Map<String, Object> add(@RequestBody Catalogue catalogue) {
+		String id = catalogueService.add(catalogue);
+		pushNotificationService.broadcast(new Message("catalog", id.toString(), Action.CREATED));
+		return new HashMap<String, Object>(){{put("message", "Catalog created");put("id", id);}};
 	}
 	
 	@GetMapping("/catalogues")
@@ -40,8 +50,10 @@ public class CatalogueController {
 	}
 	
 	@PatchMapping("/catalogue")
-	public String updateById(@RequestBody Catalogue catalogue) {
-		return catalogueService.updateById(catalogue);
+	public Map<String, Object> updateById(@RequestBody Catalogue catalogue) {
+		String id = catalogueService.updateById(catalogue);
+		pushNotificationService.broadcast(new Message("catalog", id.toString(), Action.UPDATED));
+		return new HashMap<String, Object>(){{put("message", "Catalog updated");put("id", id);}};
 	}
 	
 	@DeleteMapping("/catalogue/{id}")
@@ -55,7 +67,10 @@ public class CatalogueController {
 	}
 	
 	@DeleteMapping("/product/{id}")
-	public String deleteProductById(@PathVariable Long id) {
-		return catalogueService.deleteProductById(id);
+	public Map<String, Object> deleteProductById(@PathVariable Long id) {
+		catalogueService.deleteProductById(id);
+		pushNotificationService.broadcast(new Message("product", id.toString(), Action.DELETED));
+		return new HashMap<String, Object>(){{put("message", "Product removed");put("id", id);}};
+		
 	}
 }
