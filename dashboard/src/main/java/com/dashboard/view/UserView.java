@@ -1,6 +1,9 @@
 package com.dashboard.view;
 
+import java.util.List;
+
 import com.dashboard.model.User;
+import com.dashboard.model.UserRole;
 
 public class UserView {
 
@@ -57,5 +60,9 @@ public class UserView {
 
 	public Boolean isActive() {
 		return user.isActive();
+	}
+	
+	public List<UserRole> getUserRoles() {
+		return user.getUserRoles();
 	}
 }

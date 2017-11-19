@@ -44,7 +44,7 @@ public class FaqController {
 	@DeleteMapping("/faq/{id}")
 	public Map<String, Object> deleteById(@PathVariable Long id) {
 		faqService.deleteById(id);
-		pushNotificationService.broadcast(new Message("feedback", id.toString(), Action.CREATED));
+		pushNotificationService.broadcast(new Message("feedback", id.toString(), Action.DELETED));
 		return new HashMap<String, Object>(){{put("message", "Faq Deleted");
 											  put("id", id);}};
 	}
