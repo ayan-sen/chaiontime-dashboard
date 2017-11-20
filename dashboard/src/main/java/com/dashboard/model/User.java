@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -65,7 +67,9 @@ public class User implements Serializable{
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
 
-	
+//	@OneToOne(cascade = CascadeType.ALL)
+//	@Transient
+//    private Order userOrder;
 	
 	public User() {
 		super();
@@ -158,6 +162,14 @@ public class User implements Serializable{
 	public void setUserRoles(List<UserRole> userRoles) {
 		this.userRoles = userRoles;
 	}
+
+//	public Order getUserOrder() {
+//		return userOrder;
+//	}
+//
+//	public void setUserOrder(Order userOrder) {
+//		this.userOrder = userOrder;
+//	}
 
 	
 	

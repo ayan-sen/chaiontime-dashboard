@@ -37,6 +37,12 @@ public class Order implements Serializable {
 	@Column(name="USER_ID")
 	private String userId;
 	
+//	@JsonIgnore
+//	@NotFound(action=NotFoundAction.IGNORE)
+//	@OneToOne(fetch=FetchType.EAGER)
+//	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID",insertable=false,updatable=false)
+//	private User orderUser;
+	
 	@Column(name="ORDER_TOTALPRICE")
 	private Double totalPrice;
 	
@@ -92,6 +98,9 @@ public class Order implements Serializable {
 	
 	@Column(name="POS_ID")
 	private Long posId;
+	
+	@Column(name="OTP")
+	private Integer otp;
 	
 	@JsonIgnore
 	@NotFound(action=NotFoundAction.IGNORE)
@@ -261,6 +270,22 @@ public class Order implements Serializable {
 	public void setOrderDetails(List<OrderDetails> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
+
+	public Integer getOtp() {
+		return otp;
+	}
+
+	public void setOtp(Integer otp) {
+		this.otp = otp;
+	}
+
+//	public User getOrderUser() {
+//		return orderUser;
+//	}
+//
+//	public void setOrderUser(User orderUser) {
+//		this.orderUser = orderUser;
+//	}
 	
 	
 	
