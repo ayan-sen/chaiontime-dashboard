@@ -1,5 +1,7 @@
 package com.dashboard.repository;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -16,14 +18,22 @@ public class AttachmentRepository {
 	private EntityManager entityManager;
 	
 	
-	public Long addAttachment(Attachment attachment) {
+	public String addAttachment(Attachment attachment) {
 		entityManager.persist(attachment);
 		entityManager.flush();
-		return attachment.getId();
+		return attachment.getAttachmentName();
 	}
 
 
 	public Attachment getById(Long id) {
 		return entityManager.find(Attachment.class, id);
+	}
+
+
+	public Attachment getByFileName(String fileName) {
+		String sql = "SELECT a FROM Attachment a WHERE a.attachmentName = :fileName";
+		return entityManager.createQuery(sql, Attachment.class)
+				     		.setParameter("fileName", fileName)
+							.getSingleResult();
 	}
 }

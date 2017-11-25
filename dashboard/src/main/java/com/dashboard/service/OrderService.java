@@ -14,7 +14,6 @@ import org.springframework.util.CollectionUtils;
 import com.dashboard.model.EmailConfig;
 import com.dashboard.model.Order;
 import com.dashboard.model.OrderDetails;
-import com.dashboard.model.OrderStatus;
 import com.dashboard.model.User;
 import com.dashboard.repository.OrderRepository;
 
@@ -38,6 +37,9 @@ public class OrderService {
 		List<OrderDetails> details = order.getOrderDetails();
 		if(!CollectionUtils.isEmpty(details))
 			details.forEach(d -> d.setOrderHeader(order));
+		int otp = generateOneTimePassword();
+		order.setOtp(otp);
+		
 		return orderRepository.add(order);
 	}
 	

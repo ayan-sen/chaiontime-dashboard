@@ -28,14 +28,13 @@ public class AttachmentController {
 	private AttachmentService attachmentService;
 	
 	@PostMapping("/attachment")
-	public Long add(@RequestParam(required=true, value="file") MultipartFile file) throws IOException {
-		Attachment attachment = new Attachment(file.getBytes(), file.getOriginalFilename());
-		return attachmentService.addAttachment(attachment);
+	public String add(@RequestParam(required=true, value="file") MultipartFile file) throws IOException {
+		return attachmentService.addAttachment(file);
 	}
 	
-	@GetMapping("/attachment/{id}")
-	public ResponseEntity<InputStreamResource> getFileById(@PathVariable Long id) throws IOException {
-		Attachment attachment = attachmentService.getById(id);
+	@GetMapping("/attachment/{fileName:.+}")
+	public ResponseEntity<InputStreamResource> getFileById(@PathVariable String fileName) throws IOException {
+		Attachment attachment = attachmentService.getByFileName(fileName);
 		ByteArrayInputStream bis = new ByteArrayInputStream(attachment.getAttachment());
 		InputStreamResource resource = new InputStreamResource(bis);
 		HttpHeaders resonseHeaders = new HttpHeaders();
