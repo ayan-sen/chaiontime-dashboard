@@ -38,7 +38,7 @@ public class User implements Serializable{
 	private String email;
 	
 	@Column(name = "USER_PHONE")
-	private Long phone;
+	private String phone;
 	
 	@Column(name = "USER_ADDRESSLINE1")
 	private String addressLine1;
@@ -76,7 +76,7 @@ public class User implements Serializable{
 	}
 
 	public User(String userId, String password, String userName, String email,
-			Long phone, String addressLine1, String addressLine2, String city,
+			String phone, String addressLine1, String addressLine2, String city,
 			String state, String pincode, String country, Double walletAmount,
 			String accessRights, Boolean active) {
 		super();
@@ -111,7 +111,7 @@ public class User implements Serializable{
 		return email;
 	}
 
-	public Long getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 

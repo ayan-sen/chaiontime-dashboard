@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.dashboard.model.RequestContext;
 import com.dashboard.model.User;
 import com.dashboard.repository.UserRepository;
 
@@ -21,6 +22,9 @@ public class DashboardUserDetailService implements UserDetailsService {
 	private UserRepository userRepository;
 	
 	private String userId;
+	
+	@Autowired
+	private RequestContext requestContext;
 	
 	@Override
 	public UserDetails loadUserByUsername(String userId)
@@ -35,6 +39,8 @@ public class DashboardUserDetailService implements UserDetailsService {
 			List<GrantedAuthority> auths = activeUserInfo.getUserRoles().stream().map(u -> new SimpleGrantedAuthority(u.getRole())).collect(Collectors.toList());	
 			UserDetails userDetails = (UserDetails)new org.springframework.security.core.userdetails.User(activeUserInfo.getUserId(),
 					activeUserInfo.getPassword(), auths);
+			
+			requestContext.setUser(activeUserInfo);
 			return userDetails;
 		
 	}

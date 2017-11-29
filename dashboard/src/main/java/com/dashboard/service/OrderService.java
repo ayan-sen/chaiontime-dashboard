@@ -1,20 +1,19 @@
 package com.dashboard.service;
 
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 
 import javax.annotation.Resource;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.dashboard.model.EmailConfig;
 import com.dashboard.model.Order;
 import com.dashboard.model.OrderDetails;
-import com.dashboard.model.User;
+import com.dashboard.model.RequestContext;
 import com.dashboard.repository.OrderRepository;
 
 @Service
@@ -29,20 +28,26 @@ public class OrderService {
 	@Resource
 	private UserService userService;
 	
+	@Resource
+	private RequestContext requestContext;
+	
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public Order getOrderById(Long orderId) {
 		return orderRepository.getOrderById(orderId);
 	}
 	
-	public Long add(Order order) {
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
+	public Long add(Order order) throws ObjectNotFoundException {
+		order.setOrderDate(new Date());
+		order.setUserId(requestContext.getUser().getUserId());
 		List<OrderDetails> details = order.getOrderDetails();
 		if(!CollectionUtils.isEmpty(details))
 			details.forEach(d -> d.setOrderHeader(order));
-		int otp = generateOneTimePassword();
-		order.setOtp(otp);
-		
-		return orderRepository.add(order);
+		Long orderId = orderRepository.add(order);
+		return orderId;
 	}
 	
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public Long update(Order order) {
 		List<OrderDetails> details = order.getOrderDetails();
 		if(!CollectionUtils.isEmpty(details))
@@ -50,49 +55,15 @@ public class OrderService {
 		return orderRepository.update(order);
 	}
 	
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public List<Order> getAll() {
 		return orderRepository.getAll();
 	}
 	
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public Long updateOrderStatus(Long orderId, String orderStatus) {
 		Order order = this.getOrderById(orderId);
 		order.setStatus(orderStatus);
 		return orderRepository.update(order);
-	}
-	
-	public Long updateOtp(Long orderId, int otp) {
-		Order order = this.getOrderById(orderId);
-		order.setOtp(otp);
-		return orderRepository.update(order);
-	}
-	
-	public boolean verifyOtp(Long orderId, int otp) {
-		Order order = this.getOrderById(orderId);
-		boolean status = false;
-		if(order.getOtp() == otp) {
-			status = true;
-		}
-		updateOtp(orderId, 0);
-		return status;
-	}
-	
-	public Long generateOtp(Long orderId) throws ObjectNotFoundException {
-		Order order = this.getOrderById(orderId);
-		int otp = generateOneTimePassword();
-		User user = userService.getById(order.getUserId());
-		String email = user.getEmail();
-		updateOtp(orderId, otp);
-		EmailConfig config = new EmailConfig(Arrays.asList(email), null, null, "OTP generated for Order #" + orderId, "Order OTP is " + otp);
-		emailService.sendEmail(config);
-		return orderRepository.update(order);
-	}
-
-	private int generateOneTimePassword() {
-		Random random = new Random();
-		int rand = random.nextInt(9999);
-		if(rand < 1000) {
-			rand+=1000;
-		}
-		return rand;
 	}
 }

@@ -99,9 +99,6 @@ public class Order implements Serializable {
 	@Column(name="POS_ID")
 	private Long posId;
 	
-	@Column(name="OTP")
-	private Integer otp;
-	
 	@JsonIgnore
 	@NotFound(action=NotFoundAction.IGNORE)
 	@OneToOne(fetch=FetchType.EAGER)
@@ -270,23 +267,4 @@ public class Order implements Serializable {
 	public void setOrderDetails(List<OrderDetails> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
-
-	public Integer getOtp() {
-		return otp;
-	}
-
-	public void setOtp(Integer otp) {
-		this.otp = otp;
-	}
-
-//	public User getOrderUser() {
-//		return orderUser;
-//	}
-//
-//	public void setOrderUser(User orderUser) {
-//		this.orderUser = orderUser;
-//	}
-	
-	
-	
 }

@@ -26,7 +26,7 @@ public class UserView {
 		return user.getEmail();
 	}
 
-	public Long getPhone() {
+	public String getPhone() {
 		return user.getPhone();
 	}
 

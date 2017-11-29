@@ -8,22 +8,20 @@ import javassist.tools.rmi.ObjectNotFoundException;
 
 import javax.annotation.Resource;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.model.Action;
 import com.dashboard.model.Message;
 import com.dashboard.model.Order;
-import com.dashboard.model.OrderStatus;
+import com.dashboard.model.RequestContext;
 import com.dashboard.service.OrderService;
+import com.dashboard.service.OtpService;
 import com.dashboard.service.PushNotificationService;
 
 @RestController
@@ -35,9 +33,16 @@ public class OrderController {
 	@Resource
 	private PushNotificationService pushNotificationService;
 	
+	@Resource
+	private OtpService otpService;
+	
+	@Resource
+	private RequestContext requestContext;
+	
 	@PutMapping("/order")
-	public Map<String, Object> add(@RequestBody Order order) {
+	public Map<String, Object> add(@RequestBody Order order) throws ObjectNotFoundException {
 		Long id = orderService.add(order);
+		otpService.generateOtp(id.toString(), "ORDER", requestContext.getUser());
 		pushNotificationService.broadcast(new Message("order", id.toString(), Action.CREATED));
 		return new HashMap<String, Object>(){{put("message", "Order created");put("id", id);}};
 	}
@@ -66,28 +71,5 @@ public class OrderController {
 		orderService.updateOrderStatus(orderId, status);
 		pushNotificationService.broadcast(new Message("order", orderId.toString(), Action.UPDATED));
 		return new HashMap<String, Object>(){{put("message", "Order status updated");put("id", orderId);}};
-	}
-	
-	@PostMapping("/order/{id}/generate/otp")
-	public Map<String, Object> generateOtp(@PathVariable Long id) throws ObjectNotFoundException {
-		orderService.generateOtp(id);
-		pushNotificationService.broadcast(new Message("order", id.toString(), Action.OTP_GENERATED));
-		return new HashMap<String, Object>(){{put("message", "Order generated successfully");put("id", id);}};
-	}
-	
-	@PostMapping("/order/verify/otp")
-	public ResponseEntity<Map<String, Object>> verifyOtp(@RequestBody Map<String, Object> map) {
-		Long orderId = Long.parseLong(map.get("orderId").toString());
-		int otp = (Integer) map.get("otp");
-		boolean verified = orderService.verifyOtp(orderId, otp);
-		if(verified) {
-			pushNotificationService.broadcast(new Message("order", orderId.toString(), Action.OTP_SUCCESSFUL));
-			return new ResponseEntity<>(new HashMap<String, Object>(){{put("message", "OTP verification successful");
-																	put("id", orderId);}}, HttpStatus.OK);
-		} else {
-			pushNotificationService.broadcast(new Message("order", orderId.toString(), Action.OTP_UNSUCCESSFUL));
-			return new ResponseEntity<>(new HashMap<String, Object>(){{put("message", "OTP verification unsuccessful");
-																	put("id", orderId);}}, HttpStatus.UNAUTHORIZED);
-		}
 	}
 }
