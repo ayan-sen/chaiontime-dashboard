@@ -8,6 +8,8 @@ import javassist.tools.rmi.ObjectNotFoundException;
 
 import javax.annotation.Resource;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,12 +66,15 @@ public class OrderController {
 		return orderService.getAll();
 	}
 	
-	@PostMapping("/order/status")
-	public Map<String, Object> updateOrderStatus(@RequestBody Map<String, Object> map) {
-		Long orderId = (Long) map.get("orderId");
-		String status = (String) map.get("status");
-		orderService.updateOrderStatus(orderId, status);
-		pushNotificationService.broadcast(new Message("order", orderId.toString(), Action.UPDATED));
-		return new HashMap<String, Object>(){{put("message", "Order status updated");put("id", orderId);}};
+	@PostMapping("/order/update")
+	public ResponseEntity<Map<String, Object>> updateOrder(@RequestBody Map<String, Object> order)  {
+		try {
+			Long orderId = orderService.updateOrder(order);
+			pushNotificationService.broadcast(new Message("order", orderId.toString(), Action.UPDATED));
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{put("message", "Order status updated");put("id", orderId);}}, HttpStatus.OK);
+		} catch (Exception e) {
+			pushNotificationService.broadcast(new Message("order", order.get("orderId").toString(), Action.FAILED));
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{put("message", "Order status updated");put("id", order.get("orderId").toString());}}, HttpStatus.UNAUTHORIZED);
+		}
 	}
 }

@@ -1,12 +1,15 @@
 package com.dashboard.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -15,6 +18,7 @@ import com.dashboard.model.Order;
 import com.dashboard.model.OrderDetails;
 import com.dashboard.model.RequestContext;
 import com.dashboard.repository.OrderRepository;
+import com.razorpay.Payment;
 
 @Service
 public class OrderService {
@@ -30,6 +34,9 @@ public class OrderService {
 	
 	@Resource
 	private RequestContext requestContext;
+	
+	@Resource
+	private PaymentService paymentService;
 	
 	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public Order getOrderById(Long orderId) {
@@ -66,4 +73,35 @@ public class OrderService {
 		order.setStatus(orderStatus);
 		return orderRepository.update(order);
 	}
+	
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
+	public Long updateOrder(Map<String, Object> order) throws Exception {
+		Long orderId = (Long) order.get("orderId");
+		String razorpayPaymentId = (String) order.getOrDefault("razorpayPaymentId", "");
+		Double totalPrice = (Double) order.getOrDefault("totalPrice", 0.0);
+		if(StringUtils.isNotEmpty(razorpayPaymentId) && totalPrice > 0) {
+			long paisa = Double.valueOf(totalPrice*100).longValue();
+			Payment payment = paymentService.capture(razorpayPaymentId, Long.toString(paisa));
+			if(payment != null) {
+				long paymentId = paymentService.add(orderId, payment);
+				order.put("paymentId", paymentId);
+				return orderRepository.updateFields(evaluate(order));
+			} else {
+				throw new Exception("Payment not captured successfully");
+			}
+		}
+		return orderId;
+	}
+	
+	private Map<String, Object> evaluate(Map<String, Object> payload) {
+		Map<String, Object> mappedFields = new HashMap<>();
+		payload.forEach((k, v) -> {
+			if(!k.equals("razorpayPaymentId")) {
+				mappedFields.put(k, v);
+			}
+		});
+		return mappedFields;
+	}
+	
+	
 }

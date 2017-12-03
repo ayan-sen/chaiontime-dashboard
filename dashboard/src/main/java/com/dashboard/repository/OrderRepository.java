@@ -1,9 +1,13 @@
 package com.dashboard.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
@@ -36,5 +40,20 @@ public class OrderRepository {
 		entityManager.merge(order);
 		entityManager.flush();
 		return order.getOrderId();
+	}
+	
+	public Long updateFields(Map<String, Object> mappedFields) {
+		Long orderId = (Long) mappedFields.get("orderId");
+		mappedFields.remove("orderId");
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaUpdate<Order> update = cb.createCriteriaUpdate(Order.class);
+        Root<Order> e = update.from(Order.class);
+        mappedFields.forEach((k,v) -> {
+        	update.set(k, v);
+        });
+        update.where(cb.equal(e.get("orderId"), orderId));
+        
+        this.entityManager.createQuery(update).executeUpdate();
+        return orderId;
 	}
 }

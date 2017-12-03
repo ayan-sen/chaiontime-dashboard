@@ -94,6 +94,14 @@
 		    <version>1.11.235</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/com.razorpay/razorpay-java -->
+		<dependency>
+		    <groupId>com.razorpay</groupId>
+		    <artifactId>razorpay-java</artifactId>
+		    <version>1.3.2</version>
+		</dependency>
+		
+		
 	</dependencies>
 
 	<build>
