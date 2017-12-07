@@ -76,7 +76,7 @@ public class OrderService {
 	
 	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public Long updateOrder(Map<String, Object> order) throws Exception {
-		Long orderId = (Long) order.get("orderId");
+		Long orderId = ((Integer) order.get("orderId")).longValue();
 		String razorpayPaymentId = (String) order.getOrDefault("razorpayPaymentId", "");
 		Double totalPrice = (Double) order.getOrDefault("totalPrice", 0.0);
 		if(StringUtils.isNotEmpty(razorpayPaymentId) && totalPrice > 0) {
@@ -85,12 +85,11 @@ public class OrderService {
 			if(payment != null) {
 				long paymentId = paymentService.add(orderId, payment);
 				order.put("paymentId", paymentId);
-				return orderRepository.updateFields(evaluate(order));
 			} else {
 				throw new Exception("Payment not captured successfully");
 			}
 		}
-		return orderId;
+		return orderRepository.updateFields(evaluate(order));
 	}
 	
 	private Map<String, Object> evaluate(Map<String, Object> payload) {

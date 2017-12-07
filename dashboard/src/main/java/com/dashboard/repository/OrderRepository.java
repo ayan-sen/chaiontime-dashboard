@@ -43,7 +43,7 @@ public class OrderRepository {
 	}
 	
 	public Long updateFields(Map<String, Object> mappedFields) {
-		Long orderId = (Long) mappedFields.get("orderId");
+		Long orderId = ((Integer) mappedFields.get("orderId")).longValue();
 		mappedFields.remove("orderId");
         CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
         CriteriaUpdate<Order> update = cb.createCriteriaUpdate(Order.class);

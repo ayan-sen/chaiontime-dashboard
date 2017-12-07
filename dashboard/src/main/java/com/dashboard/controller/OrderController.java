@@ -74,7 +74,7 @@ public class OrderController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{put("message", "Order status updated");put("id", orderId);}}, HttpStatus.OK);
 		} catch (Exception e) {
 			pushNotificationService.broadcast(new Message("order", order.get("orderId").toString(), Action.FAILED));
-			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{put("message", "Order status updated");put("id", order.get("orderId").toString());}}, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{put("message", "Payment failed");put("id", order.get("orderId").toString());}}, HttpStatus.BAD_REQUEST);
 		}
 	}
 }
