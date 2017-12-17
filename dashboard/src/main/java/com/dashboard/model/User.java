@@ -40,24 +40,6 @@ public class User implements Serializable{
 	@Column(name = "USER_PHONE")
 	private String phone;
 	
-	@Column(name = "USER_ADDRESSLINE1")
-	private String addressLine1;
-	
-	@Column(name = "USER_ADDRESSLINE2")
-	private String addressLine2;
-	
-	@Column(name = "USER_CITY")
-	private String city;
-	
-	@Column(name = "USER_STATE")
-	private String state;
-	
-	@Column(name = "USER_POSTALCODE")
-	private String pincode;
-	
-	@Column(name = "USER_COUNTRY")
-	private String country;
-	
 	@Column(name = "USER_WALLETAMT")
 	private Double walletAmount;
 	
@@ -66,6 +48,9 @@ public class User implements Serializable{
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<UserAddress> userAddress;
 
 //	@OneToOne(cascade = CascadeType.ALL)
 //	@Transient
@@ -76,8 +61,7 @@ public class User implements Serializable{
 	}
 
 	public User(String userId, String password, String userName, String email,
-			String phone, String addressLine1, String addressLine2, String city,
-			String state, String pincode, String country, Double walletAmount,
+			String phone, Double walletAmount,
 			String accessRights, Boolean active) {
 		super();
 		this.userId = userId;
@@ -85,12 +69,6 @@ public class User implements Serializable{
 		this.userName = userName;
 		this.email = email;
 		this.phone = phone;
-		this.addressLine1 = addressLine1;
-		this.addressLine2 = addressLine2;
-		this.city = city;
-		this.state = state;
-		this.pincode = pincode;
-		this.country = country;
 		this.walletAmount = walletAmount;
 		this.active = active;
 	}
@@ -115,30 +93,6 @@ public class User implements Serializable{
 		return phone;
 	}
 
-	public String getAddressLine1() {
-		return addressLine1;
-	}
-
-	public String getAddressLine2() {
-		return addressLine2;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public String getPincode() {
-		return pincode;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
 	public Double getWalletAmount() {
 		return walletAmount;
 	}
@@ -161,6 +115,14 @@ public class User implements Serializable{
 
 	public void setUserRoles(List<UserRole> userRoles) {
 		this.userRoles = userRoles;
+	}
+	
+	public List<UserAddress> getUserAddress() {
+		return userAddress;
+	}
+
+	public void setUserAddress(List<UserAddress> userAddress) {
+		this.userAddress = userAddress;
 	}
 
 //	public Order getUserOrder() {

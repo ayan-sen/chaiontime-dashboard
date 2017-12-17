@@ -3,6 +3,7 @@ package com.dashboard.view;
 import java.util.List;
 
 import com.dashboard.model.User;
+import com.dashboard.model.UserAddress;
 import com.dashboard.model.UserRole;
 
 public class UserView {
@@ -30,30 +31,6 @@ public class UserView {
 		return user.getPhone();
 	}
 
-	public String getAddressLine1() {
-		return user.getAddressLine1();
-	}
-
-	public String getAddressLine2() {
-		return user.getAddressLine2();
-	}
-
-	public String getCity() {
-		return user.getCity();
-	}
-
-	public String getState() {
-		return user.getState();
-	}
-
-	public String getPincode() {
-		return user.getPincode();
-	}
-
-	public String getCountry() {
-		return user.getCountry();
-	}
-
 	public Double getWalletAmount() {
 		return user.getWalletAmount();
 	}
@@ -64,5 +41,9 @@ public class UserView {
 	
 	public List<UserRole> getUserRoles() {
 		return user.getUserRoles();
+	}
+	
+	public List<UserAddress> getUserAddress() {
+		return user.getUserAddress();
 	}
 }
