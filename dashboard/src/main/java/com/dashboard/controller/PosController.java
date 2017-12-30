@@ -1,4 +1,4 @@
-package com.dashboard.controller;
+/*package com.dashboard.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -75,3 +75,4 @@ public class PosController {
 		return new HashMap<String, Object>(){{put("message", "Vendor deleted");put("id", id);}};
 	}
 }
+*/

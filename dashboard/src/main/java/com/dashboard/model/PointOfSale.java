@@ -1,24 +1,18 @@
 package com.dashboard.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="POS")
@@ -43,9 +37,16 @@ public class PointOfSale implements Serializable {
 	@Column(name="POS_OWNER_MAIL")
 	private String posOwnerEmail;
 	
-	@OneToMany(mappedBy = "posVendor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	/*@OneToMany(mappedBy = "posVendor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
-    private List<Vendor> vendors;
+    private List<Vendor> vendors;*/
+	
+	@Column(name="VENDOR_ID")
+	private Long vendorId;
+
+	@ManyToOne
+	@JoinColumn(name = "VENDOR_ID",referencedColumnName="VENDOR_ID", insertable = false, updatable = false)
+	private Vendor vendorPos;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@Transient
@@ -91,14 +92,14 @@ public class PointOfSale implements Serializable {
 		this.posOwnerEmail = posOwnerEmail;
 	}
 
-	public List<Vendor> getVendors() {
+	/*public List<Vendor> getVendors() {
 		return vendors;
 	}
 
 	public void setVendors(List<Vendor> vendors) {
 		this.vendors = vendors;
 	}
-
+*/
 	public Order getOrderPos() {
 		return orderPos;
 	}
@@ -106,7 +107,23 @@ public class PointOfSale implements Serializable {
 	public void setOrderPos(Order orderPos) {
 		this.orderPos = orderPos;
 	}
+
+	public Vendor getVendorPos() {
+		return vendorPos;
+	}
+
+	public void setVendorPos(Vendor vendorPos) {
+		this.vendorPos = vendorPos;
+	}
 	
+	public Long getVendorId() {
+		return vendorId;
+	}
+
+	public void setVendorId(Long vendorId) {
+		this.vendorId = vendorId;
+	}
+
 	
 }
 

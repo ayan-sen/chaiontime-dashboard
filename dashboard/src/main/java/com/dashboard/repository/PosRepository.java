@@ -1,4 +1,4 @@
-package com.dashboard.repository;
+/*package com.dashboard.repository;
 
 import java.util.List;
 
@@ -58,3 +58,4 @@ public class PosRepository {
 		return entityManager.find(Vendor.class, id);
 	}
 }
+*/

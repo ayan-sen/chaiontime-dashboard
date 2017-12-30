@@ -1,6 +1,7 @@
 package com.dashboard.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,10 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,14 +51,27 @@ public class Vendor implements Serializable {
 	@Column(name="POS_ID")
 	private Long posId;
 	
-	@JsonIgnore
+	@OneToMany(mappedBy = "vendorPos", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
+    private List<PointOfSale> vendorPos;
+	
+	
+	/*@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "POS_ID",referencedColumnName="POS_ID", insertable = false, updatable = false)
-	private PointOfSale posVendor;
+	private PointOfSale posVendor;*/
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@Transient
     private Order vendorOrder;
+
+	public List<PointOfSale> getVendorPos() {
+		return vendorPos;
+	}
+
+	public void setVendorPos(List<PointOfSale> vendorPos) {
+		this.vendorPos = vendorPos;
+	}
 
 	public Long getVendorId() {
 		return vendorId;
@@ -105,14 +121,14 @@ public class Vendor implements Serializable {
 		this.vendorAddress = vendorAddress;
 	}
 
-	public Long getPosId() {
+	/*public Long getPosId() {
 		return posId;
 	}
 
 	public void setPosId(Long posId) {
 		this.posId = posId;
 	}
-
+*/
 	public Order getVendorOrder() {
 		return vendorOrder;
 	}
@@ -120,7 +136,7 @@ public class Vendor implements Serializable {
 	public void setVendorOrder(Order vendorOrder) {
 		this.vendorOrder = vendorOrder;
 	}
-
+/*
 	public PointOfSale getPosVendor() {
 		return posVendor;
 	}
@@ -128,6 +144,6 @@ public class Vendor implements Serializable {
 	public void setPosVendor(PointOfSale posVendor) {
 		this.posVendor = posVendor;
 	}
-	
+*/
 	
 }

@@ -1,4 +1,4 @@
-package com.dashboard.service;
+/*package com.dashboard.service;
 
 import java.util.List;
 
@@ -80,3 +80,4 @@ public class PosService {
 	}
 	
 }
+*/
