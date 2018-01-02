@@ -47,6 +47,7 @@ public class OrderService {
 	public Long add(Order order) throws ObjectNotFoundException {
 		order.setOrderDate(new Date());
 		order.setUserId(requestContext.getUser().getUserId());
+		order.setStatus("RECEIVED");
 		List<OrderDetails> details = order.getOrderDetails();
 		if(!CollectionUtils.isEmpty(details))
 			details.forEach(d -> d.setOrderHeader(order));

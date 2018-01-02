@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -26,12 +27,16 @@ public class EmailService {
 	@Resource
 	private ApplicationContext applicationContext;
 	
+	@Value("${spring.mail.from}")
+	private String from;
+	
 	private static final Logger logger = Logger.getLogger(EmailService.class);
 	
 	public void sendEmail(EmailConfig config) {
 		
 		MimeMessagePreparator preparator = mimeMessage -> {
 			MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
+			message.setFrom(from);
 			message.setTo(config.getTo().toArray(new String[config.getTo().size()]));
 			message.setCc(config.getCc().toArray(new String[config.getCc().size()]));
 			message.setBcc(config.getBcc().toArray(new String[config.getBcc().size()]));
