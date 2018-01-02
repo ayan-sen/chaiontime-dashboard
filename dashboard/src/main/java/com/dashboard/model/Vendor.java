@@ -36,23 +36,13 @@ public class Vendor implements Serializable {
 	@Column(name="VENDOR_NAME")
 	private String vendorName;
 	
-	@Column(name="VENDOR_LONG")
-	private String longitude;
-	
-	@Column(name="VENDOR_LAT")
-	private String latitude;
-	
 	@Column(name="VENDOR_ACTIVE")
 	private int active=1;
 	
 	@Column(name="VENDOR_ADDRESS")
 	private String vendorAddress;
 	
-	@Column(name="POS_ID")
-	private Long posId;
-	
 	@OneToMany(mappedBy = "vendorPos", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
     private List<PointOfSale> vendorPos;
 	
 	
@@ -63,7 +53,7 @@ public class Vendor implements Serializable {
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@Transient
-    private Order vendorOrder;
+    private Order orderVendor;
 
 	public List<PointOfSale> getVendorPos() {
 		return vendorPos;
@@ -89,22 +79,6 @@ public class Vendor implements Serializable {
 		this.vendorName = vendorName;
 	}
 
-	public String getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
-
-	public String getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
-
 	public int getActive() {
 		return active;
 	}
@@ -121,29 +95,13 @@ public class Vendor implements Serializable {
 		this.vendorAddress = vendorAddress;
 	}
 
-	/*public Long getPosId() {
-		return posId;
+	public Order getOrderVendor() {
+		return orderVendor;
 	}
 
-	public void setPosId(Long posId) {
-		this.posId = posId;
-	}
-*/
-	public Order getVendorOrder() {
-		return vendorOrder;
+	public void setOrderVendor(Order orderVendor) {
+		this.orderVendor = orderVendor;
 	}
 
-	public void setVendorOrder(Order vendorOrder) {
-		this.vendorOrder = vendorOrder;
-	}
-/*
-	public PointOfSale getPosVendor() {
-		return posVendor;
-	}
-
-	public void setPosVendor(PointOfSale posVendor) {
-		this.posVendor = posVendor;
-	}
-*/
 	
 }

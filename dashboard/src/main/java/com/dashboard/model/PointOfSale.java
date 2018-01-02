@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="POS")
@@ -37,15 +40,18 @@ public class PointOfSale implements Serializable {
 	@Column(name="POS_OWNER_MAIL")
 	private String posOwnerEmail;
 	
-	/*@OneToMany(mappedBy = "posVendor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-    private List<Vendor> vendors;*/
+	@Column(name="POS_LONG")
+	private String longitude;
 	
-	@Column(name="VENDOR_ID")
-	private Long vendorId;
-
-	@ManyToOne
-	@JoinColumn(name = "VENDOR_ID",referencedColumnName="VENDOR_ID", insertable = false, updatable = false)
+	@Column(name="POS_LAT")
+	private String latitude;
+	
+	@Column(name="POS_ADDRESS")
+	private String posAddress;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
+	@JoinColumn(name = "VENDOR_ID")
 	private Vendor vendorPos;
 	
 	@OneToOne(cascade = CascadeType.ALL)
@@ -117,11 +123,33 @@ public class PointOfSale implements Serializable {
 	}
 	
 	public Long getVendorId() {
-		return vendorId;
+		return this.vendorPos.getVendorId();
 	}
 
-	public void setVendorId(Long vendorId) {
-		this.vendorId = vendorId;
+	
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getPosAddress() {
+		return posAddress;
+	}
+
+	public void setPosAddress(String posAddress) {
+		this.posAddress = posAddress;
 	}
 
 	

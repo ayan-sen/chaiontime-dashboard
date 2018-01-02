@@ -46,10 +46,10 @@ public class User implements Serializable{
 	@Column(name = "USER_ACTIVE")
 	private Boolean active=true;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private List<UserRole> userRoles;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userAddress", cascade = CascadeType.ALL)
     private List<UserAddress> userAddress;
 
 //	@OneToOne(cascade = CascadeType.ALL)

@@ -34,11 +34,8 @@ public class UserAddress implements Serializable {
 //	@Column(name="USER_ID")
 //	private String useId;
 	
-	@Column(name = "USER_ADDRESSLINE1")
+	@Column(name = "USER_ADDRESSLINE")
 	private String addressLine1;
-	
-	@Column(name = "USER_ADDRESSLINE2")
-	private String addressLine2;
 	
 	@Column(name = "USER_CITY")
 	private String city;
@@ -61,16 +58,15 @@ public class UserAddress implements Serializable {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
 	@JoinColumn(name = "USER_ID")
-	private User user;
+	private User userAddress;
 	
 	public UserAddress() {
 		super();
 	}
 
-	public UserAddress(String addressLine1, String addressLine2, String city,String state,String pincode,String country, String longitude, String latitude) {
+	public UserAddress(String addressLine1, String city,String state,String pincode,String country, String longitude, String latitude) {
 		super();
 		this.addressLine1 = addressLine1;
-		this.addressLine2 = addressLine2;
 		this.city = city;
 		this.state = state;
 		this.pincode = pincode;
@@ -99,10 +95,6 @@ public class UserAddress implements Serializable {
 		return addressLine1;
 	}
 
-	public String getAddressLine2() {
-		return addressLine2;
-	}
-
 	public String getCity() {
 		return city;
 	}
@@ -121,10 +113,6 @@ public class UserAddress implements Serializable {
 
 	public void setAddressLine1(String addressLine1) {
 		this.addressLine1 = addressLine1;
-	}
-
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
 	}
 
 	public void setCity(String city) {
@@ -152,15 +140,15 @@ public class UserAddress implements Serializable {
 	}
 	
 	public String getUserId() {
-		return user.getUserId();
+		return userAddress.getUserId();
 	}
 	
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserAddress(User userAddress) {
+		this.userAddress = userAddress;
 	}
 
-	public User getUser() {
-		return user;
+	public User getUserAddress() {
+		return userAddress;
 	}
 
 }
