@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.dashboard.model.User;
+import com.dashboard.model.UserAddress;
 import com.dashboard.model.UserRole;
 import com.dashboard.repository.UserRepository;
 
@@ -27,6 +28,9 @@ public class UserService {
 		List<UserRole> userRoles = user.getUserRoles();
 		if(!CollectionUtils.isEmpty(userRoles))
 			userRoles.forEach(u -> u.setUser(user));
+		List<UserAddress> userAddresses = user.getUserAddress();
+		if(!CollectionUtils.isEmpty(userAddresses))
+			userAddresses.forEach(u -> u.setUserAddress(user));
 		return userRepository.add(user);
 	}
 
@@ -54,6 +58,11 @@ public class UserService {
 		List<UserRole> userRoles = user.getUserRoles();
 		if(!CollectionUtils.isEmpty(userRoles))
 			userRoles.forEach(u -> u.setUser(user));
+		
+		List<UserAddress> userAddresses = user.getUserAddress();
+		if(!CollectionUtils.isEmpty(userAddresses))
+			userAddresses.forEach(u -> u.setUserAddress(user));
+		
 		return userRepository.updateById(user);
 	}
 

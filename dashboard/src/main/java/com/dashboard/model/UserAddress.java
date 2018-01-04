@@ -33,11 +33,8 @@ public class UserAddress implements Serializable {
 	@Column(name="USER_ADDRESS_ID")
 	private String userAddressId;
 	
-//	@Column(name="USER_ID")
-//	private String useId;
-	
 	@Column(name = "USER_ADDRESSLINE")
-	private String addressLine1;
+	private String addressLine;
 	
 	@Column(name = "USER_CITY")
 	private String city;
@@ -57,6 +54,9 @@ public class UserAddress implements Serializable {
 	@Column(name="USER_LAT")
 	private String latitude;
 	
+	@Column(name="ADDRESS_TYPE")
+	private String addressType;
+	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
 	@JoinColumn(name = "USER_ID")
@@ -71,17 +71,6 @@ public class UserAddress implements Serializable {
 		super();
 	}
 
-	public UserAddress(String addressLine1, String city,String state,String pincode,String country, String longitude, String latitude) {
-		super();
-		this.addressLine1 = addressLine1;
-		this.city = city;
-		this.state = state;
-		this.pincode = pincode;
-		this.country = country;
-		this.latitude = latitude;
-		this.longitude = longitude;
-	}
-	
 	public String getLongitude() {
 		return longitude;
 	}
@@ -98,8 +87,8 @@ public class UserAddress implements Serializable {
 		this.latitude = latitude;
 	}
 
-	public String getAddressLine1() {
-		return addressLine1;
+	public String getAddressLine() {
+		return addressLine;
 	}
 
 	public String getCity() {
@@ -118,8 +107,8 @@ public class UserAddress implements Serializable {
 		return country;
 	}
 
-	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
+	public void setAddressLine(String addressLine) {
+		this.addressLine = addressLine;
 	}
 
 	public void setCity(String city) {
@@ -164,6 +153,14 @@ public class UserAddress implements Serializable {
 
 	public void setOrderUserAddress(Order orderUserAddress) {
 		this.orderUserAddress = orderUserAddress;
+	}
+
+	public String getAddressType() {
+		return addressType;
+	}
+
+	public void setAddressType(String addressType) {
+		this.addressType = addressType;
 	}
 
 }
