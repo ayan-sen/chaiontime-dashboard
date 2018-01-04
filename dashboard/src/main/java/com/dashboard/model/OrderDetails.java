@@ -32,21 +32,12 @@ public class OrderDetails implements Serializable {
 	@Column(name = "QUANTITY")
 	private Long quantity;
 	
-	@Column(name = "UNIT")
-	private String unit;
-	
-	@Column(name = "UNIT_PRICE")
-	private Double unitPrice;
-	
 	@Column(name = "TOTAL_PRICE")
 	private Double totalPrice;
 	
-	@Column(name = "ORDER_ID")
-	private Long orderId;
-	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
-	@JoinColumn(name = "ORDER_ID", insertable=false, updatable=false)
+	@JoinColumn(name = "ORDER_ID")
 	private Order orderHeader;
 
 	public Long getOrderDetailsId() {
@@ -73,36 +64,12 @@ public class OrderDetails implements Serializable {
 		this.quantity = quantity;
 	}
 
-	public String getUnit() {
-		return unit;
-	}
-
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-
-	public Double getUnitPrice() {
-		return unitPrice;
-	}
-
-	public void setUnitPrice(Double unitPrice) {
-		this.unitPrice = unitPrice;
-	}
-
 	public Double getTotalPrice() {
 		return totalPrice;
 	}
 
 	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
-	}
-
-	public Long getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
 	}
 
 	public Order getOrderHeader() {

@@ -16,9 +16,12 @@ import org.springframework.util.CollectionUtils;
 
 import com.dashboard.model.Order;
 import com.dashboard.model.OrderDetails;
+import com.dashboard.model.Product;
 import com.dashboard.model.RequestContext;
 import com.dashboard.repository.OrderRepository;
 import com.razorpay.Payment;
+
+
 
 @Service
 public class OrderService {
@@ -38,6 +41,9 @@ public class OrderService {
 	@Resource
 	private PaymentService paymentService;
 	
+	@Resource
+	private CatalogueService catalogueService;
+	
 	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public Order getOrderById(Long orderId) {
 		return orderRepository.getOrderById(orderId);
@@ -49,8 +55,28 @@ public class OrderService {
 		order.setUserId(requestContext.getUser().getUserId());
 		order.setStatus("RECEIVED");
 		List<OrderDetails> details = order.getOrderDetails();
-		if(!CollectionUtils.isEmpty(details))
-			details.forEach(d -> d.setOrderHeader(order));
+		double totalPrice = 0.0;
+		Long totalItems = 0L;
+		if(!CollectionUtils.isEmpty(details)) {
+			for(OrderDetails d: details) {
+				d.setOrderHeader(order);
+				Long productId = d.getProductId();
+				long quantity = d.getQuantity();
+				try {
+					Product p = catalogueService.getProductById(productId);
+					double finalBuyPrice = p.getFinalBuyPrice();
+					double productPrice = finalBuyPrice * quantity;
+					totalPrice = totalPrice + productPrice;
+					d.setTotalPrice(finalBuyPrice * quantity);
+					totalItems = totalItems + quantity;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		order.setTotalPrice(totalPrice);
+		order.setTotalItems(totalItems.intValue());
 		Long orderId = orderRepository.add(order);
 		return orderId;
 	}
@@ -58,8 +84,30 @@ public class OrderService {
 	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public Long update(Order order) {
 		List<OrderDetails> details = order.getOrderDetails();
-		if(!CollectionUtils.isEmpty(details))
-			details.forEach(d -> d.setOrderHeader(order));
+		double totalPrice = 0.0;
+		Long totalItems = 0L;
+		if(!CollectionUtils.isEmpty(details)) {
+			for(OrderDetails d: details) {
+				d.setOrderHeader(order);
+				Long productId = d.getProductId();
+				long quantity = d.getQuantity();
+				try {
+					Product p = catalogueService.getProductById(productId);
+					double finalBuyPrice = p.getFinalBuyPrice();
+					double productPrice = finalBuyPrice * quantity;
+					totalPrice = totalPrice + productPrice;
+					d.setTotalPrice(finalBuyPrice * quantity);
+					totalItems = totalItems + quantity;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		order.setTotalPrice(totalPrice);
+		order.setTotalItems(totalItems.intValue());
+		order.setStatus("RECEIVED");
+		order.setIsPaid(0);
 		return orderRepository.update(order);
 	}
 	
@@ -86,6 +134,7 @@ public class OrderService {
 			if(payment != null) {
 				long paymentId = paymentService.add(orderId, payment);
 				order.put("paymentId", paymentId);
+				order.put("isPaid", 1);
 			} else {
 				throw new Exception("Payment not captured successfully");
 			}

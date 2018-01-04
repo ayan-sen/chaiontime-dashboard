@@ -75,7 +75,7 @@ public class CatalogueService {
 	}
 
 	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
-	public Product getProductById(String id) throws ObjectNotFoundException {
+	public Product getProductById(Long id) throws ObjectNotFoundException {
 		Product product = catalogueRepository.getProductById(id);
 		if(product == null) {
 			throw new ObjectNotFoundException("Product is not found for id :" + id);

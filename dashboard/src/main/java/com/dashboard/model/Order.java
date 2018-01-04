@@ -46,8 +46,8 @@ public class Order implements Serializable {
 	@Column(name="ORDER_TOTALPRICE")
 	private Double totalPrice;
 	
-	@Column(name="DELIVERY_ADDRESS")
-	private String deliveryAddres;
+	@Column(name="USER_ADDRESS_ID")
+	private String userAddressId;
 	
 	@Column(name="VENDOR_ID")
 	private Long venodrId;
@@ -90,12 +90,6 @@ public class Order implements Serializable {
 	@Column(name="DEIVERY_DATE")
 	private Date deliveryDate;
 	
-	@Column(name="DELIVERY_LAT")
-	private String latitude;
-	
-	@Column(name="DELIVERY_LON")
-	private String longitude;
-	
 	@Column(name="POS_ID")
 	private Long posId;
 	
@@ -107,6 +101,11 @@ public class Order implements Serializable {
 
 	@OneToMany(mappedBy = "orderHeader", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderDetails> orderDetails;
+	
+	@NotFound(action=NotFoundAction.IGNORE)
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="USER_ADDRESS_ID", referencedColumnName="USER_ADDRESS_ID",insertable=false,updatable=false)
+	private UserAddress userAddress;
 	
 	public Long getOrderId() {
 		return orderId;
@@ -130,14 +129,6 @@ public class Order implements Serializable {
 
 	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
-	}
-
-	public String getDeliveryAddres() {
-		return deliveryAddres;
-	}
-
-	public void setDeliveryAddres(String deliveryAddres) {
-		this.deliveryAddres = deliveryAddres;
 	}
 
 	public Long getVenodrId() {
@@ -228,22 +219,6 @@ public class Order implements Serializable {
 		this.deliveryDate = deliveryDate;
 	}
 
-	public String getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
-
-	public String getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
-
 	public Long getPosId() {
 		return posId;
 	}
@@ -266,5 +241,21 @@ public class Order implements Serializable {
 
 	public void setOrderDetails(List<OrderDetails> orderDetails) {
 		this.orderDetails = orderDetails;
+	}
+
+	public String getUserAddressId() {
+		return userAddressId;
+	}
+
+	public void setUserAddressId(String userAddressId) {
+		this.userAddressId = userAddressId;
+	}
+
+	public UserAddress getUserAddress() {
+		return userAddress;
+	}
+
+	public void setUserAddress(UserAddress userAddress) {
+		this.userAddress = userAddress;
 	}
 }

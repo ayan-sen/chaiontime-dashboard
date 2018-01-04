@@ -11,7 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -59,6 +61,11 @@ public class UserAddress implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,  CascadeType.MERGE})
 	@JoinColumn(name = "USER_ID")
 	private User userAddress;
+	
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL)
+	@Transient
+    private Order orderUserAddress;
 	
 	public UserAddress() {
 		super();
@@ -149,6 +156,14 @@ public class UserAddress implements Serializable {
 
 	public User getUserAddress() {
 		return userAddress;
+	}
+
+	public Order getOrderUserAddress() {
+		return orderUserAddress;
+	}
+
+	public void setOrderUserAddress(Order orderUserAddress) {
+		this.orderUserAddress = orderUserAddress;
 	}
 
 }

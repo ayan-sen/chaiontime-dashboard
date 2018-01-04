@@ -62,7 +62,7 @@ public class CatalogueController {
 	}
 	
 	@GetMapping("/product/{id}")
-	public Product getProductById(@PathVariable String id) throws ObjectNotFoundException {
+	public Product getProductById(@PathVariable Long id) throws ObjectNotFoundException {
 		return catalogueService.getProductById(id);
 	}
 	

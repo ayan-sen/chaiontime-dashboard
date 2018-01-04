@@ -55,7 +55,7 @@ public class CatalogueRepository {
 		return product.getCatalogueId();
 	}
 
-	public Product getProductById(String id) {
+	public Product getProductById(Long id) {
 		return entityManager.find(Product.class, id);
 	}
 }

@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.csrf()
 			.disable()
 		    .authorizeRequests().anyRequest().hasAnyRole("ADMIN","USER")
+		    .antMatchers("/dashboard/connect").permitAll()
 		    .antMatchers("/dashboard/**").hasAnyRole("ADMIN","USER")
 		    .and().httpBasic().realmName("CHAIONTIME")
 		    .authenticationEntryPoint(appAuthenticationEntryPoint)
