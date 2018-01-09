@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import com.dashboard.model.Catalogue;
 import com.dashboard.model.EmailConfig;
 import com.dashboard.model.Product;
+import com.dashboard.model.RequestContext;
 import com.dashboard.repository.CatalogueRepository;
 
 @Service
@@ -25,15 +26,17 @@ public class CatalogueService {
 	@Resource
 	private EmailService emailService;
 	
+	@Resource
+	private SmsService smsService;
+	
+	@Resource
+	private RequestContext requestContext;
+	
 	@Secured ({"ROLE_ADMIN"})
 	public String add(Catalogue catalogue) {
 		List<Product> products = catalogue.getProducts();
 		if(!CollectionUtils.isEmpty(products))
 			products.forEach(p -> p.setCatalogue(catalogue));
-		
-		EmailConfig config = new EmailConfig(Arrays.asList("ayan.sen@live.com"), null, null, "catalog added", "tempalate/emailbody.st");
-		emailService.sendEmail(config);
-		
 		return catalogueRepository.add(catalogue);
 	}
 
@@ -57,6 +60,8 @@ public class CatalogueService {
 		
 		EmailConfig config = new EmailConfig(Arrays.asList("ayan.sen@live.com"), null, null, "catalog added", "catalog test mail");
 		emailService.sendEmail(config);
+		
+		smsService.sendSms(requestContext.getUser(), "test sms from chaiontime");
 		return catalogue;
 	}
 

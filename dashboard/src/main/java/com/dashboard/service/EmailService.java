@@ -8,8 +8,10 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -20,7 +22,7 @@ import com.dashboard.util.ExpressionEvaluator;
 
 @Service
 public class EmailService {
-
+	
 	@Resource
 	private JavaMailSender javaMailSender;
 	
@@ -43,7 +45,11 @@ public class EmailService {
 			message.setSubject(evaluate(config.getSubject(), config.getModel()));
 			message.setText(evaluate(config.getBody(), config.getModel()), true);
 		};
-		javaMailSender.send(preparator);
+		try {
+			javaMailSender.send(preparator);
+		} catch (MailException e) {
+			logger.error("Exception occurred in email service:", e);
+		}
 	}
 	
 	public String evaluate(String expression, Map<String, Object> model) {
