@@ -58,6 +58,25 @@ public class PointOfSale implements Serializable {
 	@Transient
     private Order orderPos;
 
+	public PointOfSale() {
+		super();
+	}
+	
+	public PointOfSale(int posId, int active, String posArea,
+			String posOwnerName, String posOwnerEmail, String longitude,
+			String latitude, String posAddres, int vendorId) {
+		super();
+		this.posId = new Long(posId);
+		this.active = active;
+		this.posArea = posArea;
+		this.posOwnerName = posOwnerName;
+		this.posOwnerEmail = posOwnerEmail;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.posAddress = posAddress;
+		this.vendorPos = new Vendor(){{setVendorId(new Long(vendorId));}};
+	}
+
 	public Long getPosId() {
 		return posId;
 	}

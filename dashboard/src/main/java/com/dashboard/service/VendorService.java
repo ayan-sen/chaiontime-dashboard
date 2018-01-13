@@ -78,5 +78,11 @@ public class VendorService {
 	public Long deletePointOfSaleById(Long id) {
 		return vendorRepository.deletePointOfSaleById(id);
 	}
+
+	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
+	public List<PointOfSale> getPosNearLocation(String latitude,
+			String longitude, int radious) {
+		return vendorRepository.getPosNearLocation(latitude, longitude, radious);
+	}
 	
 }

@@ -14,14 +14,15 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.model.Action;
 import com.dashboard.model.Message;
 import com.dashboard.model.PointOfSale;
 import com.dashboard.model.Vendor;
-import com.dashboard.service.VendorService;
 import com.dashboard.service.PushNotificationService;
+import com.dashboard.service.VendorService;
 
 @RestController
 public class VendorController {
@@ -73,5 +74,12 @@ public class VendorController {
 		vendorService.deletePointOfSaleById(id);
 		pushNotificationService.broadcast(new Message("pos", id.toString(), Action.DELETED));
 		return new HashMap<String, Object>(){{put("message", "POS deleted");put("id", id);}};
+	}
+	
+	@GetMapping("/pos/location")
+	public List<PointOfSale> getPosesOfUserLocation(@RequestParam(name="latitude", required=true) String latitude, 
+													@RequestParam(name="longitude", required=true) String longitude,
+													@RequestParam(name="radious", defaultValue="5", required=false) int radious) {
+		return vendorService.getPosNearLocation(latitude, longitude, radious);
 	}
 }

@@ -36,15 +36,11 @@ public class OrderController {
 	private PushNotificationService pushNotificationService;
 	
 	@Resource
-	private OtpService otpService;
-	
-	@Resource
 	private RequestContext requestContext;
 	
 	@PutMapping("/order")
 	public Map<String, Object> add(@RequestBody Order order) throws ObjectNotFoundException {
 		Long id = orderService.add(order);
-		otpService.generateOtp(id.toString(), "ORDER", requestContext.getUser());
 		pushNotificationService.broadcast(new Message("order", id.toString(), Action.CREATED));
 		return new HashMap<String, Object>(){{put("message", "Order created");put("id", id);}};
 	}

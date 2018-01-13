@@ -44,6 +44,9 @@ public class OrderService {
 	@Resource
 	private CatalogueService catalogueService;
 	
+	@Resource
+	private OtpService otpService;
+	
 	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
 	public Order getOrderById(Long orderId) {
 		return orderRepository.getOrderById(orderId);
@@ -108,7 +111,9 @@ public class OrderService {
 		order.setTotalItems(totalItems.intValue());
 		order.setStatus("RECEIVED");
 		order.setIsPaid(0);
-		return orderRepository.update(order);
+		Long id = orderRepository.update(order);
+		otpService.generateOtp(id.toString(), "ORDER", requestContext.getUser());
+		return id;
 	}
 	
 	@Secured ({"ROLE_ADMIN", "ROLE_USER"})
