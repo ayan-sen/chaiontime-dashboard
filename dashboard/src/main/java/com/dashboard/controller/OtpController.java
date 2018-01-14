@@ -22,8 +22,9 @@ public class OtpController {
 	@PostMapping("/verify/otp")
 	public ResponseEntity<Map<String, Object>> verifyOtp(@RequestBody Map<String, Object> map) {
 		String entityId = (String) map.get("entityId");
+		String entityType = (String) map.get("entityType");
 		int otp = (Integer) map.get("otp");
-		boolean verified = otpService.verify(entityId, otp);
+		boolean verified = otpService.verify(entityId, entityType, otp);
 		if(verified) {
 			return new ResponseEntity<>(new HashMap<String, Object>(){{put("message", "OTP verification successful");
 																	put("id", entityId);}}, HttpStatus.OK);

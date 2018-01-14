@@ -52,7 +52,7 @@ public class PaymentService {
 		paymentLog.setUserId(requestContext.getUser().getUserId());
 		paymentLog.setMode(payment.get("method"));
 		paymentLog.setPaymentDateTime(new Date());
-		paymentLog.setAmount(Double.parseDouble(payment.get("amount"))/100);
+		paymentLog.setAmount(Double.valueOf(((Integer)payment.get("amount")).doubleValue()));
 		paymentLog.setSource("RAZORPAY");
 		paymentLog.setSourcePaymentId(payment.get("id"));
 		return paymentRepository.add(paymentLog);

@@ -35,4 +35,10 @@ public class FaqRepository {
 		entityManager.flush();
 		return faq.getId();
 	}
+
+	public Long update(Faq faq) {
+		entityManager.persist(faq);
+		entityManager.flush();
+		return faq.getId();
+	}
 }

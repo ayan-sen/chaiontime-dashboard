@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javassist.tools.rmi.ObjectNotFoundException;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dashboard.model.Action;
 import com.dashboard.model.Faq;
 import com.dashboard.model.Message;
+import com.dashboard.model.TermsAndCondition;
 import com.dashboard.service.FaqService;
 import com.dashboard.service.PushNotificationService;
 
@@ -49,4 +53,10 @@ public class FaqController {
 											  put("id", id);}};
 	}
 
+	@PatchMapping("/faq")
+	public Map<String, Object> update(@RequestBody Faq faq) throws ObjectNotFoundException {
+		Long id = faqService.update(faq);
+		pushNotificationService.broadcast(new Message("faq", id.toString(), Action.UPDATED));
+		return new HashMap<String, Object>(){{put("message", "Faq updated");put("id", id);}};
+	}
 }

@@ -30,4 +30,8 @@ public class TermsAndConditionService {
 	public Long deleteById(Long id) {
 		return termsAndConditionRepository.deleteById(id);
 	}
+
+	public Long update(TermsAndCondition termsAndCondition) {
+		return termsAndConditionRepository.update(termsAndCondition);
+	}
 }

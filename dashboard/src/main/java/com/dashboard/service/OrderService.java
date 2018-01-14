@@ -112,7 +112,6 @@ public class OrderService {
 		order.setStatus("RECEIVED");
 		order.setIsPaid(0);
 		Long id = orderRepository.update(order);
-		otpService.generateOtp(id.toString(), "ORDER", requestContext.getUser());
 		return id;
 	}
 	
@@ -133,13 +132,23 @@ public class OrderService {
 		Long orderId = ((Integer) order.get("orderId")).longValue();
 		String razorpayPaymentId = (String) order.getOrDefault("razorpayPaymentId", "");
 		Double totalPrice = (Double) order.getOrDefault("totalPrice", 0.0);
+		Integer otp = (Integer) order.get("otp");
+		if(otp != null) {
+			boolean verified = otpService.verify(orderId.toString(), "ORDER", otp);
+			if(!verified) {
+				throw new Exception("OTP verification is not successful, please try again.");
+			}
+			order.put("status", "DELIVERED");
+		}
+		
 		if(StringUtils.isNotEmpty(razorpayPaymentId) && totalPrice > 0) {
-			long paisa = Double.valueOf(totalPrice*100).longValue();
+			long paisa = Double.valueOf(totalPrice).longValue();
 			Payment payment = paymentService.capture(razorpayPaymentId, Long.toString(paisa));
 			if(payment != null) {
 				long paymentId = paymentService.add(orderId, payment);
 				order.put("paymentId", paymentId);
 				order.put("isPaid", 1);
+				otpService.generateOtp(orderId.toString(), "ORDER", requestContext.getUser());
 			} else {
 				throw new Exception("Payment not captured successfully");
 			}
@@ -150,7 +159,7 @@ public class OrderService {
 	private Map<String, Object> evaluate(Map<String, Object> payload) {
 		Map<String, Object> mappedFields = new HashMap<>();
 		payload.forEach((k, v) -> {
-			if(!k.equals("razorpayPaymentId")) {
+			if(!k.equals("razorpayPaymentId") || !k.equals("otp")) {
 				mappedFields.put(k, v);
 			}
 		});

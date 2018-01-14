@@ -38,9 +38,14 @@ public class OtpRepository {
 		return otp;
 	}
 	
-	public boolean verify(String entity, int otpNumber) {
-		String sql = "SELECT o FROM Otp o WHERE o.entity =:entity ORDER BY timestamp DESC";
-		List<Otp> otps = entityManager.createQuery(sql).setMaxResults(1).setParameter("entity", entity).getResultList();
+	public boolean verify(String entity, String entityType, int otpNumber) {
+		String sql = "SELECT o FROM Otp o WHERE o.entity =:entity AND o.entityType =:entityType ORDER BY timestamp DESC";
+		List<Otp> otps = entityManager.createQuery(sql)
+									.setMaxResults(1)
+									.setParameter("entity", entity)
+									.setParameter("entityType", entityType)
+									.getResultList();
+		
 		if(!CollectionUtils.isEmpty(otps)) {
 			Otp otp = otps.get(0);
 			if(otp.getOtp() == otpNumber) {

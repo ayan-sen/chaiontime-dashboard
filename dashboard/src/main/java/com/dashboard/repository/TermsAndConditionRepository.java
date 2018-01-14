@@ -35,4 +35,10 @@ public class TermsAndConditionRepository {
 		entityManager.flush();
 		return termsAndCondition.getId();
 	}
+
+	public Long update(TermsAndCondition termsAndCondition) {
+		entityManager.merge(termsAndCondition);
+		entityManager.flush();
+		return termsAndCondition.getId();
+	}
 }

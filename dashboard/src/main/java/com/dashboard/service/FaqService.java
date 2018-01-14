@@ -30,4 +30,8 @@ public class FaqService {
 	public Long deleteById(Long id) {
 		return faqRepository.deleteById(id);
 	}
+
+	public Long update(Faq faq) {
+		return faqRepository.update(faq);
+	}
 }

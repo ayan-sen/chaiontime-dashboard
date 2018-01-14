@@ -41,7 +41,7 @@ public class OtpService {
 		emailService.sendEmail(config);
 	}
 	
-	public boolean verify(String entity, int otp) {
-		return otpRepository.verify(entity, otp);
+	public boolean verify(String entity, String entityType, int otp) {
+		return otpRepository.verify(entity,entityType, otp);
 	}
 }

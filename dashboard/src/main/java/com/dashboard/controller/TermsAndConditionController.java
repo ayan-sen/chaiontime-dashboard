@@ -4,16 +4,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javassist.tools.rmi.ObjectNotFoundException;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.model.Action;
+import com.dashboard.model.DeliveryPerson;
 import com.dashboard.model.Faq;
 import com.dashboard.model.Message;
 import com.dashboard.model.TermsAndCondition;
@@ -48,5 +52,12 @@ public class TermsAndConditionController {
 		pushNotificationService.broadcast(new Message("ternmsandconditions", id.toString(), Action.DELETED));
 		return new HashMap<String, Object>(){{put("message", "Terms and Conditions Deleted");
 											  put("id", id);}};
+	}
+	
+	@PatchMapping("/terms")
+	public Map<String, Object> update(@RequestBody TermsAndCondition termsAndCondition) throws ObjectNotFoundException {
+		Long id = termsAndConditionService.update(termsAndCondition);
+		pushNotificationService.broadcast(new Message("termsAndCondition", id.toString(), Action.UPDATED));
+		return new HashMap<String, Object>(){{put("message", "Terms AND Conditions updated");put("id", id);}};
 	}
 }
